@@ -1,0 +1,62 @@
+/*-------------------------------------------------------------------- Variables */
+
+:root {
+    --white: #ffffff;
+    --black: #212529;
+    --shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    --orange-pantone: #f85a15;
+    --orange-pantone-lighter: #f96728;
+    --gun-metal: #212a30;
+    --font: sans-serif, "Montserrat", Georgia;
+    --culture: #f2f2f2;
+}
+
+/* -------------------------------------------------------------------- Resets */
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--culture);
+    min-height:900px;
+    margin-bottom: 150px;
+    font-family: var(--font);
+}
+
+/* -------------------------------------------------------------------- general classes */
+.title {
+    text-align: center;
+    font-size: 2.5rem;
+}
+
+
+.user_button {
+    width: 100%;
+    background-color: var(--orange-pantone);
+    color: var(--white)
+}
+
+.user_button_sm {
+    background-color: var(--orange-pantone);
+    color: var(--white)
+}
+
+
+/* admin form */
+.admin-form {
+    width: 800px;
+    margin: auto;
+}
+
+
+.message {
+    text-align: center;
+    width: 30%;
+    margin: auto;
+}
+
+
+
