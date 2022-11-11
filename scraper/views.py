@@ -4,6 +4,8 @@ from docx import Document
 import json
 
 
+
+
 # Create your views here.
 
 def scraper(request):
