@@ -4,8 +4,6 @@ from docx import Document
 import json
 
 
-
-
 # Create your views here.
 
 def scraper(request):
@@ -51,6 +49,7 @@ def scraper(request):
             for table in tables:
                 if 'Language' in table.rows[0].cells[0].text:
                     if "Lesson" in table.rows[1].cells[0].text:
+                        
                         dic['lessons'].append(
                             {
                                 "title": {
@@ -63,28 +62,33 @@ def scraper(request):
                                 "subLessons": []
                             }
                         )
-                        lesson_number += 1
 
-          # lessons
-            for table in tables:
-                if 'Language' in table.rows[0].cells[0].text:
-                    if "Screen" in table.rows[1].cells[0].text or "Screen" in table.rows[2].cells[0].text:
-                     if "Lesson" not in table.rows[1].cells[0].text:
-                        print(table.rows[1].cells[0].text)     
+                        lesson_number += 1
+                    
+                        if "Screen" in table.rows[2].cells[0].text:
+                            dic['lessons'][lesson_number - 1]['subLessons'].append(
+                                   {
+                                        "title": {
+                                            "en": table.rows[2].cells[1].text,
+                                            "cy": '',
+                                        },
+                                    }
+                                )
+   
+                    elif "Screen" in table.rows[1].cells[0].text:
+                        dic['lessons'][lesson_number - 1]['subLessons'].append(
+                               {
+                                        "title": {
+                                            "en": table.rows[1].cells[1].text,
+                                            "cy": '',
+                                        },
+                                    }
+                            )
 
             messages.success(request, 'File converted succesfully')
     dic = json.dumps(dic, indent=4)
     context = {'dic': dic}
     return render(request, 'scraper.html', context)
-
-
-
-
-
-
-
-
-
 
 
 
