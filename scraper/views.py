@@ -10,6 +10,7 @@ def scraper(request):
     files = request.FILES.getlist('filename')
     dic = {}
     lesson_number = 0
+    card_number = 0
     if request.POST:
         if not files:
             messages.error(request, 'The input is empy, please add a file')
@@ -49,7 +50,7 @@ def scraper(request):
             for table in tables:
                 if 'Language' in table.rows[0].cells[0].text:
                     if "Lesson" in table.rows[1].cells[0].text:
-                        
+
                         dic['lessons'].append(
                             {
                                 "title": {
@@ -64,33 +65,103 @@ def scraper(request):
                         )
 
                         lesson_number += 1
-                    
+                        card_number += 1
+                    # adding screens
                         if "Screen" in table.rows[2].cells[0].text:
                             dic['lessons'][lesson_number - 1]['subLessons'].append(
-                                   {
-                                        "title": {
-                                            "en": table.rows[2].cells[1].text,
-                                            "cy": '',
-                                        },
-                                    }
-                                )
-   
+                                {
+                                    "title": {
+                                        "en": table.rows[2].cells[1].text,
+                                        "cy": '',
+                                    },
+                                    "slug": "slug",
+                                    "cards": []
+                                }
+
+                            )
+
                     elif "Screen" in table.rows[1].cells[0].text:
                         dic['lessons'][lesson_number - 1]['subLessons'].append(
-                               {
-                                        "title": {
-                                            "en": table.rows[1].cells[1].text,
-                                            "cy": '',
+                            {
+                                "title": {
+                                    "en": table.rows[1].cells[1].text,
+                                    "cy": '',
+                                },
+                                "slug": "slug",
+                                "cards": []
+                            },
+
+                        )
+
+                # adding reading cards
+                if "READING" in table.rows[0].cells[0].text:
+                    dic['lessons'][lesson_number - 1]['subLessons'].append(
+                        dic['lessons']['subLessons'].append(
+                            {
+                                "title": {
+                                    "en": "Lesson objectives",
+                                    "cy": ""
+                                },
+                                "slug": "slug",
+                                "cards": [
+                                    {
+                                        "type": "read",
+                                        "data": {
+                                            "title": {
+                                                "en": "",
+                                                "cy": ""
+                                            },
+                                            "content": {
+                                                "en": "<p>In this lesson, you will learn about the following:</p><ul><li>William Shakespeare</li><li>the background of the play</li><li>what tragedy is</li><li>the themes in the play.</li></ul>",
+                                                "cy": "",
+                                                "_editorEn": "visual"
+                                            }
                                         },
+                                        "answer": {
+                                            "en": "",
+                                            "cy": ""
+                                        },
+                                        "hint": {
+                                            "en": "",
+                                            "cy": ""
+                                        },
+                                        "extension": {
+                                            "en": "",
+                                            "cy": ""
+                                        },
+                                        "downloadFiles": []
                                     }
-                            )
+                                ]
+                            },
+                        )
+
+                    )
 
             messages.success(request, 'File converted succesfully')
     dic = json.dumps(dic, indent=4)
     context = {'dic': dic}
     return render(request, 'scraper.html', context)
 
-
+    #  cards = [
+    #                 'READING',
+    #                 'True or False',
+    #                 'WRITING',
+    #                 'Fill the gap',
+    #                 'Video block',
+    #                 'REFLECT',
+    #                 'Download block ',
+    #                 'HINT/SUPPORT',
+    #                 'OPINION',
+    #                 'GLOSSARY',
+    #                 'CASE STUDY',
+    #                 'ANSWER',
+    #                 'Sortable into Columns',
+    #                 'Thought Shower',
+    #                 'EXTENSION',
+    #                 'SUMMARY',
+    #                 'Fill the gaps – Typing',
+    #                 'Ranking no correct answer',
+    #             ]
 
 
 #  for i in range(lesson_number):
@@ -104,8 +175,7 @@ def scraper(request):
 #                                         },
 #                                     }
 
-#                                 )     
-
+#                                 )
 
 
 #  for i in range(1,lesson_number + 1):
@@ -114,7 +184,6 @@ def scraper(request):
 #                                     dic['lessons'][j]['subLessons'].append(
 #                                         '--yes'
 #                                     )
-
 
 
 #   dic['lessons'][0]['subLessons'].append(
