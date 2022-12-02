@@ -10,7 +10,27 @@ def scraper(request):
     files = request.FILES.getlist('filename')
     dic = {}
     lesson_number = 0
-    card_number = 0
+    screen_number = 0
+
+    cards = [
+        'READING', 'True or False',
+        'WRITING',
+        'Fill the gap',
+        'Video block',
+        'REFLECT',
+        'Download block ',
+        'HINT/SUPPORT',
+        'OPINION',
+        'GLOSSARY',
+        'CASE STUDY',
+        'ANSWER',
+        'Sortable into Columns',
+        'Thought Shower',
+        'EXTENSION',
+        'SUMMARY',
+        'Fill the gaps – Typing',
+        'Ranking no correct answer',
+    ]
     if request.POST:
         if not files:
             messages.error(request, 'The input is empy, please add a file')
@@ -58,15 +78,15 @@ def scraper(request):
                                     "cy": table.rows[1].cells[2].text.strip(),
                                 },
                                 "active": False,
-                                # "heroImage": "https://resource.download.wjec.co.uk/vtc/2022-23/el22-23_2-6/images/shakespeare-book.png",
-                                # "progress": 0,
+                                "heroImage": "https://resource.download.wjec.co.uk/vtc/2022-23/el22-23_2-6/images/shakespeare-book.png",
+                                "progress": 0,
                                 "subLessons": []
                             }
                         )
 
                         lesson_number += 1
-                        card_number += 1
-                    # adding screens
+                        screen_number = 0
+                        # adding screens
                         if "Screen" in table.rows[2].cells[0].text:
                             dic['lessons'][lesson_number - 1]['subLessons'].append(
                                 {
@@ -79,6 +99,13 @@ def scraper(request):
                                 }
 
                             )
+                            screen_number += 1 
+                            if table.rows[2].cells[1].text == '':
+                                messages.error(request,f'{lesson_number}, {screen_number} is empty,  {table.rows[2].cells[0].text}')
+
+                            
+
+                
 
                     elif "Screen" in table.rows[1].cells[0].text:
                         dic['lessons'][lesson_number - 1]['subLessons'].append(
@@ -92,297 +119,203 @@ def scraper(request):
                             },
 
                         )
+                        screen_number += 1
+                        if table.rows[1].cells[1].text == '':
+                            messages.error(request,f'{lesson_number}, {screen_number} is empty, {table.rows[1].cells[0].text}')
+                        
 
-                # adding reading cards
-                if "READING" in table.rows[0].cells[0].text:
-                    dic['lessons'][lesson_number - 1]['subLessons'].append(
-                        dic['lessons']['subLessons'].append(
-                            {
+             # adding reading cards
+                if "Static text – READING " in table.rows[0].cells[0].text or 'Static text – LESSON OBJECTIVES' in table.rows[0].cells[0].text:
+                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'].append(
+                        {
+                            "type": "read",
+                            "data": {
                                 "title": {
-                                    "en": "Lesson objectives",
+                                    "en": "",
                                     "cy": ""
                                 },
-                                "slug": "slug",
-                                "cards": [
-                                    {
-                                        "type": "read",
-                                        "data": {
-                                            "title": {
-                                                "en": "",
-                                                "cy": ""
-                                            },
-                                            "content": {
-                                                "en": "<p>In this lesson, you will learn about the following:</p><ul><li>William Shakespeare</li><li>the background of the play</li><li>what tragedy is</li><li>the themes in the play.</li></ul>",
-                                                "cy": "",
-                                                "_editorEn": "visual"
-                                            }
-                                        },
-                                        "answer": {
-                                            "en": "",
-                                            "cy": ""
-                                        },
-                                        "hint": {
-                                            "en": "",
-                                            "cy": ""
-                                        },
-                                        "extension": {
-                                            "en": "",
-                                            "cy": ""
-                                        },
-                                        "downloadFiles": []
+                                "content": {
+                                    "en": table.rows[2].cells[0].text,
+                                    "cy": table.rows[2].cells[1].text,
+                                    "_editorEn": "visual"
+                                }
+                            },
+                            "answer": {
+                                "en": "",
+                                "cy": ""
+                            },
+                            "hint": {
+                                "en": "",
+                                "cy": ""
+                            },
+                            "extension": {
+                                "en": "",
+                                "cy": ""
+                            },
+                            "downloadFiles": []
+                        },
+                    )
+
+                # adding WRITING cards
+                if "WRITING" in table.rows[0].cells[0].text:
+                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'].append(
+                        {
+                            "type": "write",
+                            "data": {
+                                "title": {
+                                    "en": "",
+                                    "cy": ""
+                                },
+                                "content": {
+                                    "en": table.rows[2].cells[0].text,
+                                    "cy": table.rows[2].cells[1].text,
+                                    "_editorEn": "visual"
+                                }
+                            },
+                            "answer": {
+                                "en": "",
+                                "cy": ""
+                            },
+                            "hint": {
+                                "en": "",
+                                "cy": ""
+                            },
+                            "extension": {
+                                "en": "",
+                                "cy": ""
+                            },
+                            "downloadFiles": []
+                        },
+                    )
+
+                # Adding CASE STUDY cards
+                if "case study" in table.rows[0].cells[0].text.lower():
+                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'].append(
+                        {
+                            "type": "caseStudy",
+                            "data": {
+                                "title": {
+                                    "en": "",
+                                    "cy": ""
+                                },
+                                "content": {
+                                    "en": table.rows[2].cells[0].text,
+                                    "cy": table.rows[2].cells[1].text,
+                                    "_editorEn": "visual"
+                                }
+                            },
+                        },
+                    )
+
+                # Adding SPEAKING cards
+                if "speaking" in table.rows[0].cells[0].text.lower():
+                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'].append(
+                        {
+                            "type": "speaking",
+                            "data": {
+                                "title": {
+                                    "en": "",
+                                    "cy": ""
+                                },
+                                "content": {
+                                    "en": table.rows[2].cells[0].text,
+                                    "cy": table.rows[2].cells[1].text,
+                                    "_editorEn": "visual"
+                                }
+                            },
+                        },
+                    )
+
+                # Adding SUMMARY cards
+                if "summary" in table.rows[0].cells[0].text.lower():
+                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'].append(
+                        {
+                            "type": "summary",
+                            "data": {
+                                "title": {
+                                    "en": "",
+                                    "cy": ""
+                                },
+                                "content": {
+                                    "en": table.rows[2].cells[0].text,
+                                    "cy": table.rows[2].cells[1].text,
+                                    "_editorEn": "visual"
+                                }
+                            },
+                        },
+                    )
+
+                # Adding MCQ cards
+                if "MCQ" in table.rows[0].cells[0].text:
+                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'].append(
+                        {
+                            "type": "mcq",
+                            "data": {
+                                "title": {
+                                    "en": "",
+                                    "cy": ""
+                                },
+                                "content": {
+                                    "en": table.rows[2].cells[0].text,
+                                    "cy": table.rows[2].cells[1].text,
+                                    "_editorEn": "visual"
+                                }
+                            },
+                        },
+                    )
+
+                if "Spot the mistake" in table.rows[0].cells[0].text:
+
+                    for i in range(3, len(table.rows)):
+            
+                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'].append(
+                            {
+                                "type": "spotMistake",
+                                "data": {
+                                    "title": {
+                                        "en": "",
+                                        "cy": ""
+                                    },
+                                    "content": {
+                                        "en": "<p>Spot the mistake in the sentence and then insert the correction.</p>",
+                                        "cy": "<p>Ceisiwch ddod o hyd i’r camgymeriad yn y frawddeg yna ewch ati i’w chywiro.</p>\n"
+                                    },
+                                    "question": {
+                                        "en": table.rows[i].cells[0].text,
+                                        "cy": table.rows[i].cells[2].text,
+                                    },
+                                    "answer": {
+                                        "en": table.rows[i].cells[1].text,
+                                        "cy": table.rows[i].cells[1].text,
+                                    },
+                                    "mistake": {
+                                        "en": "Banquo",
+                                        "cy": ""
+                                    },
+                                    "feedback": {
+                                        "en": "",
+                                        "cy": ""
                                     }
-                                ]
+                                },
+                                "answer": {
+                                    "en": "",
+                                    "cy": ""
+                                },
+                                "hint": {
+                                    "en": "",
+                                    "cy": ""
+                                },
+                                "extension": {
+                                    "en": "",
+                                    "cy": ""
+                                },
+                                "downloadFiles": []
                             },
                         )
-
-                    )
+                        print(i)
+                    messages.error(request, f'You need to add the Mistake manually in "spot the mistake activity" located in  lesson number: {lesson_number}, and screen {screen_number}' )
 
             messages.success(request, 'File converted succesfully')
     dic = json.dumps(dic, indent=4)
     context = {'dic': dic}
     return render(request, 'scraper.html', context)
-
-    #  cards = [
-    #                 'READING',
-    #                 'True or False',
-    #                 'WRITING',
-    #                 'Fill the gap',
-    #                 'Video block',
-    #                 'REFLECT',
-    #                 'Download block ',
-    #                 'HINT/SUPPORT',
-    #                 'OPINION',
-    #                 'GLOSSARY',
-    #                 'CASE STUDY',
-    #                 'ANSWER',
-    #                 'Sortable into Columns',
-    #                 'Thought Shower',
-    #                 'EXTENSION',
-    #                 'SUMMARY',
-    #                 'Fill the gaps – Typing',
-    #                 'Ranking no correct answer',
-    #             ]
-
-
-#  for i in range(lesson_number):
-#                         for j in range(1, lesson_number + 1):
-#                             if f'Lesson {j} Title':
-#                                 dic['lessons'][i]['subLessons'].append(
-#                                     {
-#                                         "title": {
-#                                             "en": table.rows[1].cells[0].text,
-#                                             "cy": '',
-#                                         },
-#                                     }
-
-#                                 )
-
-
-#  for i in range(1,lesson_number + 1):
-#                             if table.rows[1].cells[0].text == f'Lesson {i} Title':
-#                                 for j in range(lesson_number):
-#                                     dic['lessons'][j]['subLessons'].append(
-#                                         '--yes'
-#                                     )
-
-
-#   dic['lessons'][0]['subLessons'].append(
-#                                {
-#                                 "title": {
-#                                     "en": i.rows[1].cells[0].text,
-#                                     "cy": '',
-#                                 },
-#                             }
-#                            )
-
-   #  for i in tables:
-   #              if 'Language' in i.rows[0].cells[0].text:
-   #                  if "Screen" in i.rows[1].cells[0].text:
-   #                   for j in dic['lessons']:
-   #                      j['subLessons'].append(
-   #                          {
-   #                              "title": {
-   #                                  "en": i.rows[1].cells[0].text,
-   #                                  "cy": '',
-   #                              },
-   #                          }
-   #                         )
-
-   # dic['lessons'][j]['subLessons'].append(
-   #                         {
-   #                              "title": {
-   #                                  "en": 'first screen',
-   #                                  "cy": '',
-   #                              },
-   #                          }
-   #                      )
-
-    # for i in tables:
-    #           if 'Language' in i.rows[0].cells[0].text:
-    #               if "Screen" in i.rows[1].cells[0].text:
-    #                print('Screen')
-
-   #  for j  in i.rows[0].cells[0]:
-   #                      dic['lessons'][j]['subLessons'].append(
-   #                         {
-   #                              "title": {
-   #                                  "en": 'first screen',
-   #                                  "cy": '',
-   #                              },
-   #                          }
-   #                      )
-
-    # dic['lessons']['subLessons'].append(
-    #                   'yes'
-    #                #    {
-    #                #    "title": {
-    #                #    "en": i.rows[1].cells[1].text.strip(),
-    #                #    "cy": i.rows[1].cells[2].text.strip(),
-    #                #    },
-    #                #   }
-    #                  )
-
-
-# def scraper(request):
-#    files = request.FILES.getlist('filename')
-#    dic = {}
-#    if request.POST:
-#       if  not files:
-#          messages.error(request, 'the input is empy, please add a file')
-#       else:
-#          document = Document(files[0])
-#          tables = document.tables[0]
-#          row = tables.rows[0].cells[0].text
-#          columns = tables.rows[0].cells[1].text
-#          dic[row] = columns
-#          messages.success(request, 'file converted succesfully')
-#    context = {'dic':dic}
-#    return render(request, 'scraper.html', context)
-
-    # def scraper(request):
-    # files = request.FILES.getlist('filename')
-    # array = {}
-    # if request.POST:
-    #    if  not files:
-    #       messages.error(request, 'the input is empy, please add a file')
-    #    else:
-    #       document = Document(files[0])
-    #       print('paragraphs', document.tables)
-    #       for table in document.tables:
-    #          for row in table.rows:
-    #             for cell in row.cells:
-    #                for paragraph in cell.paragraphs:
-    #                   array['docs'] = paragraph.text
-
-    #       messages.success(request, 'file converted succesfully')
-    # context = {'array':array}
-    # return render(request, 'scraper.html', context)
-
-    #  document = Document(files[0])
-    #       tables = document.tables[0]
-    #       row = tables.rows[0]
-    #       column = tables.columns[0]
-    #       row_cell = row.cells[0]
-    #       row_column = column.cells[0]
-    #       row_cell_paragraphs = row_cell.paragraphs[0]
-    #       row_column_paragraphs = row_column.paragraphs[0]
-    #       text_row_cell_paragraphs = row_cell_paragraphs.text
-    #       text_row_column_paragraphs = row_column_paragraphs.text
-    #       print(text_row_cell_paragraphs, text_row_column_paragraphs)
-
-    # def scraper(request):
-    # files = request.FILES.getlist('filename')
-    # array = {}
-    # if request.POST:
-    #    if  not files:
-    #       messages.error(request, 'the input is empy, please add a file')
-    #    else:
-    #       document = Document(files[0])
-    #       tables = document.tables[0]
-    #       row = tables.rows[0].cells[0].text
-    #       columns = tables.rows[0].cells[1].text
-    #       # column = tables.columns[0].cells[1].text
-    #       # row_cell = row.cells[0]
-    #       # row_column = column.cells[0]
-    #       # row_cell_paragraphs = row_cell.paragraphs[0]
-    #       # row_column_paragraphs = row_column.paragraphs[0]
-    #       # text_row_cell_paragraphs = row_cell_paragraphs.text
-    #       # text_row_column_paragraphs = row_column_paragraphs.text
-    #       print(row, columns)
-    #       # print('text-->', text)
-    #       messages.success(request, 'file converted succesfully')
-    # return render(request, 'scraper.html')
-
-
-# "---------------------------------------------------------latest"
-
-# def scraper(request):
-#    files = request.FILES.getlist('filename')
-#    dic = {}
-#    if request.POST:
-#       if  not files:
-#          messages.error(request, 'the input is empy, please add a file')
-#       else:
-#          document = Document(files[0])
-#          # This is the first table
-#          tables = document.tables[0]
-#          project_code  = tables.rows[0].cells[1].text
-#          project_name  = tables.rows[1].cells[1].text[11:]
-#          Subject = tables.rows[2].cells[1].text
-#          dic['code'] = project_code
-#          dic['resourceTitle'] = {
-#             "en":project_name,
-#          }
-#          dic['Subject'] = {
-#             "en":Subject
-#          }
-#          dic['showSidebar'] = True
-#          # This is the second table
-#          tables = document.tables[3]
-#          Lesson_1 = tables.rows[1].cells[1].text.split("\n")[1]
-#          dic['lessons'] = {
-#               "title": {
-#                   "en": Lesson_1,
-#                   "cy": "cy " + Lesson_1,
-#                   }
-#          }
-
-#          messages.success(request, 'file converted succesfully')
-#          dic = json.dumps(dic, indent=4)
-#    context = {'dic':dic}
-#    return render(request, 'scraper.html', context)
-
-
-# getting the table names
-
-#   document = Document(files[0])
-#          # This is the first table
-#          tables = document.tables
-#          for i in tables:
-#             dic[i.rows[0].cells[0].text] = i.rows[0].cells[0].text
-
-    #  # screens
-    #       for i in tables:
-    #          if 'Language' in i.rows[0].cells[0].text:
-    #             if "Screen" in i.rows[2].cells[0].text:
-    #                print("yes")
-    #             #       dic['subLessons'].append(
-    #             #    {
-    #             #       "title": {
-    #             #       "en": i.rows[2].cells[1].text.strip(),
-    #             #       "cy": i.rows[2].cells[2].text.strip(),
-    #             #       },
-    #             #    }
-    #             # )
-
-
-#  for j in dic['lessons']:
-#                            print(j)
-#                             j['subLessons'].append(
-#                                 {
-#                                     "title": {
-#                                         "en": f' Lesson ${j} Title',
-#                                         "cy": '',
-#                                     },
-#                                 }
-#                             )
