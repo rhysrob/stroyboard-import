@@ -99,13 +99,10 @@ def scraper(request):
                                 }
 
                             )
-                            screen_number += 1 
+                            screen_number += 1
                             if table.rows[2].cells[1].text == '':
-                                messages.error(request,f'{lesson_number}, {screen_number} is empty,  {table.rows[2].cells[0].text}')
-
-                            
-
-                
+                                messages.error(
+                                    request, f'{lesson_number}, {screen_number} is empty,  {table.rows[2].cells[0].text}')
 
                     elif "Screen" in table.rows[1].cells[0].text:
                         dic['lessons'][lesson_number - 1]['subLessons'].append(
@@ -121,8 +118,8 @@ def scraper(request):
                         )
                         screen_number += 1
                         if table.rows[1].cells[1].text == '':
-                            messages.error(request,f'{lesson_number}, {screen_number} is empty, {table.rows[1].cells[0].text}')
-                        
+                            messages.error(
+                                request, f'{lesson_number}, {screen_number} is empty, {table.rows[1].cells[0].text}')
 
              # adding reading cards
                 if "Static text – READING " in table.rows[0].cells[0].text or 'Static text – LESSON OBJECTIVES' in table.rows[0].cells[0].text:
@@ -267,7 +264,7 @@ def scraper(request):
                 if "Spot the mistake" in table.rows[0].cells[0].text:
 
                     for i in range(3, len(table.rows)):
-            
+
                         dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'].append(
                             {
                                 "type": "spotMistake",
@@ -312,8 +309,40 @@ def scraper(request):
                                 "downloadFiles": []
                             },
                         )
-                        print(i)
-                    messages.error(request, f'You need to add the Mistake manually in "spot the mistake activity" located in  lesson number: {lesson_number}, and screen {screen_number}' )
+                    messages.error(
+                        request, f'You need to add the Mistake manually in "spot the mistake activity" located in  lesson number: {lesson_number}, and screen {screen_number}')
+
+                if 'Video block' in table.rows[0].cells[0].text:
+                    print(table.rows[2].cells[0].text.split('/')[0].strip())
+                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'].append(
+                        {
+                            "type": "look",
+                            "data": {
+                                "title": {
+                                    "en": "",
+                                    "cy": ""
+                                },
+                                "content": {
+                                    "en": f"\n<div class=\"video-container\"><iframe src=\"https://www.youtube.com/embed/{table.rows[0].cells[0].text}?rel=0&start=0&end=\" allowfullscreen></iframe></div>",
+                                    "cy": "",
+                                    "_editorEn": "code"
+                                }
+                            },
+                            "answer": {
+                                "en": "",
+                                "cy": ""
+                            },
+                            "hint": {
+                                "en": "",
+                                "cy": ""
+                            },
+                            "extension": {
+                                "en": "",
+                                "cy": ""
+                            },
+                            "downloadFiles": []
+                        },
+                    )
 
             messages.success(request, 'File converted succesfully')
     dic = json.dumps(dic, indent=4)
