@@ -44,6 +44,11 @@
                 <input class="btn my_hover user_button_sm" type="submit" value="submit file">
             </div>
         </form>
+           <!-- submit button -->
+           <div class="mb-3">
+            <button class="btn btn-success" onclick="copy()">Copy Json file </button>
+        </div>
+
         <p style="margin-top: 50px;">
             <textarea placeholder="" id="editing" spellcheck="false" oninput="update(this.value); sync_scroll(this);" onscroll="sync_scroll(this);" onkeydown="check_tab(this, event);">{{dic}}</textarea>
         </p>
@@ -51,6 +56,14 @@
 </section>
 
 <script>
+// copy from the textearea
+function copy() {
+  let textarea = document.getElementById("editing");
+  textarea.select();
+  document.execCommand("copy");
+}
+
+
 // HTML CSS JSResult Skip Results Iframe
 // EDIT ON
 function update(text) {
