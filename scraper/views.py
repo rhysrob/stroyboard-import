@@ -78,7 +78,7 @@ def scraper(request):
                                 {
                                     "title": {
                                         "en": table.rows[2].cells[1].text,
-                                        "cy": '',
+                                        "cy": table.rows[2].cells[2].text,
                                     },
                                     "slug": "slug",
                                     "cards": []
@@ -95,7 +95,7 @@ def scraper(request):
                             {
                                 "title": {
                                     "en": table.rows[1].cells[1].text,
-                                    "cy": '',
+                                    "cy": table.rows[1].cells[2].text,
                                 },
                                 "slug": "slug",
                                 "cards": []
