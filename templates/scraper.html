@@ -3,103 +3,110 @@
 
 {% block content %}
 <style>
-    /* Please see the article */
+  /* Please see the article */
 
-#editing, #highlighting {
-  /* Both elements need the same text and space styling so they are directly on top of each other */
-  margin: 10px;
-  padding: 10px;
-  border: 0;
-  width: calc(100% - 32px);
-  height: 700px;
-}
-#editing, #highlighting, #highlighting * {
-  /* Also add text styles to highlighing tokens */
-  font-size: 15pt;
-  font-family: monospace;
-  line-height: 20pt;
-  tab-size: 2;
-}
+  #editing,
+  #highlighting {
+    /* Both elements need the same text and space styling so they are directly on top of each other */
+    margin: 10px;
+    padding: 10px;
+    border: 0;
+    width: calc(100% - 32px);
+    height: 700px;
+  }
+
+  #editing,
+  #highlighting,
+  #highlighting * {
+    /* Also add text styles to highlighing tokens */
+    font-size: 15pt;
+    font-family: monospace;
+    line-height: 20pt;
+    tab-size: 2;
+  }
 
 
-#editing, #highlighting {
-  /* In the same place */
-  position: absolute;
-  top: 100;
-  left: 0;
-}
-
+  #editing,
+  #highlighting {
+    /* In the same place */
+    position: absolute;
+    top: 100;
+    left: 0;
+  }
 </style>
 
 <section class="mt-5 card text-center">
-    <div class="container">
-        <h2>Scraper WJEC for microsolft Docs</h2>
-        <form class="admin-form" method="POST" enctype="multipart/form-data" action="">
-            {% csrf_token %}
-        <div class="input-group mb-3">
-            <input type="file" class="form-control"  id="myFile" name="filename" id="inputGroupFile02" multiple>
-          </div>
-            <!-- submit button -->
-            <div class="mb-3">
-                <input class="btn my_hover user_button_sm" type="submit" value="submit file">
-            </div>
-        </form>
-           <!-- submit button -->
-           <div class="mb-3">
-            <button class="btn btn-success" onclick="copy()">Copy Json file </button>
-        </div>
+  <div class="container">
+    <h2>Scraper WJEC for microsolft Docs</h2>
+    <form class="admin-form" method="POST" enctype="multipart/form-data" action="">
+      {% csrf_token %}
+      <div class="input-group mb-3">
+        <input type="file" class="form-control" id="myFile" name="filename" id="inputGroupFile02" multiple>
+      </div>
+      <!-- submit button -->
+      <div class="mb-3">
+        <input class="btn my_hover user_button_sm" type="submit" value="submit file">
+      </div>
+    </form>
 
-        <p style="margin-top: 50px;">
-            <textarea placeholder="" id="editing" spellcheck="false" oninput="update(this.value); sync_scroll(this);" onscroll="sync_scroll(this);" onkeydown="check_tab(this, event);">{{dic}}</textarea>
-        </p>
+    <div class="input-group mb-3" style="width:400px; margin: auto;">
+      <input type="text" id="filename" class="form-control" placeholder="Specify a filename..."  aria-describedby="button-addon2">
+      <button id="download" class="btn btn-success" type="button" id="button-addon2">Download file</button>
     </div>
+
+    
+
+    <p style="margin-top: 50px;">
+      <textarea placeholder="" id="editing" spellcheck="false" oninput="update(this.value); sync_scroll(this);"
+        onscroll="sync_scroll(this);" onkeydown="check_tab(this, event);">{{dic}}</textarea>
+    </p>
+  </div>
 </section>
 
 <script>
-// copy from the textearea
-function copy() {
-  let textarea = document.getElementById("editing");
-  textarea.select();
-  document.execCommand("copy");
-}
+// save text to file with javascript
+function downloadFile(filename, content) {
+  // It works on all HTML5 Ready browsers as it uses the download attribute of the <a> element:
+  const element = document.createElement('a');
 
+  //A blob is a data type that can store binary data
+  // "type" is a MIME type
+  // It can have a different value, based on a file you want to save
+  const blob = new Blob([content], { type: 'plain/text' });
 
-// HTML CSS JSResult Skip Results Iframe
-// EDIT ON
-function update(text) {
-  let result_element = document.querySelector("#highlighting-content");
-  // Handle final newlines (see article)
-  if(text[text.length-1] == "\n") {
-    text += " ";
-  }
-  // Update code
-  result_element.innerHTML = text.replace(new RegExp("&", "g"), "&amp;").replace(new RegExp("<", "g"), "&lt;"); /* Global RegExp */
-  // Syntax Highlight
-  Prism.highlightElement(result_element);
-}
+  //createObjectURL() static method creates a DOMString containing a URL representing the object given in the parameter.
+  const fileUrl = URL.createObjectURL(blob);
 
-function sync_scroll(element) {
-  /* Scroll result to scroll coords of event - sync with textarea */
-  let result_element = document.querySelector("#highlighting");
-  // Get and set x and y
-  result_element.scrollTop = element.scrollTop;
-  result_element.scrollLeft = element.scrollLeft;
-}
+  //setAttribute() Sets the value of an attribute on the specified element.
+  element.setAttribute('href', fileUrl); //file location
+  element.setAttribute('download', filename); // file name
+  element.style.display = 'none';
 
-function check_tab(element, event) {
-  let code = element.value;
-  if(event.key == "Tab") {
-    /* Tab key pressed */
-    event.preventDefault(); // stop normal
-    let before_tab = code.slice(0, element.selectionStart); // text before tab
-    let after_tab = code.slice(element.selectionEnd, element.value.length); // text after tab
-    let cursor_pos = element.selectionStart + 1; // where cursor moves after tab - moving forward by 1 char to after tab
-    element.value = before_tab + "\t" + after_tab; // add tab char
-    // move cursor
-    element.selectionStart = cursor_pos;
-    element.selectionEnd = cursor_pos;
-    update(element.value); // Update text to include indent
-  }
-}
+  //use appendChild() method to move an element from one element to another
+  document.body.appendChild(element);
+  element.click();
+
+  //The removeChild() method of the Node interface removes a child node from the DOM and returns the removed node
+  document.body.removeChild(element);
+};
+
+window.onload = () => {
+  document.getElementById('download').
+  addEventListener('click', e => {
+
+    //The value of the file name input box
+    const filename = document.getElementById('filename').value;
+
+    //The value of what has been input in the textarea
+    const content = document.getElementById('editing').value;
+
+    // The && (logical AND) operator indicates whether both operands are true. If both operands have nonzero values, the result has the value 1 . Otherwise, the result has the value 0.
+
+    if (filename && content) {
+      downloadFile(filename, content);
+    }
+  });
+};
+
 </script>
 {% endblock content %}
