@@ -534,11 +534,11 @@ def scraper(request):
                                 "content": {
                                         "en": "Click on the answer you think is correct.",
                                         "cy": "Cliciwch ar yr ateb rydych chi'n credu sy'n gywir."
-                                        },
+                                    },
                                 "question": {
                                         "en": table.rows[2].cells[0].text,
                                         "cy": table.rows[2].cells[1].text,
-                                        },
+                                    },
                                 "choices": [
                                         {
                                             "answer": {
@@ -561,11 +561,11 @@ def scraper(request):
                                             },
                                             "correct": False
                                         }
-                                        ],
+                                    ],
                                 "feedback": {
                                         "en": "Optional <span data-glossary='something abour something.'>Word</span>",
                                         "cy": "Adborth opsiynol"
-                                        }
+                                    }
                             }
                         }
 
@@ -1154,8 +1154,8 @@ def scraper(request):
                             }
                         }
                     )
-                messages.error(
-                    request, f'Structured Framework card with answer in Lesson {lesson_number}, Screen {screen_number}, add content {table.rows[0].cells[0].text}')
+                    messages.error(
+                        request, f'Structured Framework card with answer in Lesson {lesson_number}, Screen {screen_number}, add content {table.rows[0].cells[0].text}')
 
                 # Thought shower
                 if 'Thought shower'.lower() in table.rows[0].cells[0].text.lower():
@@ -1191,101 +1191,101 @@ def scraper(request):
                             "downloadFiles": []
                         }
                     )
-            messages.error(
-                request, f'Thought shower card with answer in Lesson {lesson_number}, Screen {screen_number}, add content {table.rows[0].cells[0].text}')
+                    messages.error(
+                        request, f'Thought shower card with answer in Lesson {lesson_number}, Screen {screen_number}, add content {table.rows[0].cells[0].text}')
 
-            # Video with Question
-            if 'Video with Question'.lower() in table.rows[0].cells[0].text.lower():
-                dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'].append(
-                    {
-                        "type": "videoQuestion",
-                        "downloadFiles": [],
-                        "hint": {},
-                        "extension": {},
-                        "answer": {},
-                        "data": {
-                            "title": {
-                                "en": "Video with Question - Source",
-                                "cy": "_Read Title"
-                            },
-                            "content": {
-                                "en": "<p>Take a look at the following video and asnwer the questions that appear.</p>",
-                                "cy": "<p>Cymerwch olwg ar y fideo ac yna ateb y cewsitynau sy'n ymddangos.</p>"
-                            },
-                            "isYouTube": False,
-                            "path": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-                            "questions": [
-                                {
-                                    "time": 3,
-                                    "comment": {
-                                        "en": "What do you think of this statement?",
-                                        "cy": "Beth ydych yn meddwl o'r hyn?"
-                                    }
+                # Video with Question
+                if 'Video with Question'.lower() in table.rows[0].cells[0].text.lower():
+                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'].append(
+                        {
+                            "type": "videoQuestion",
+                            "downloadFiles": [],
+                            "hint": {},
+                            "extension": {},
+                            "answer": {},
+                            "data": {
+                                "title": {
+                                    "en": "Video with Question - Source",
+                                    "cy": "_Read Title"
                                 },
-                                {
-                                    "time": 6,
-                                    "comment": {
-                                        "en": "Can you think of any other like this?",
-                                        "cy": ""
-                                    }
+                                "content": {
+                                    "en": "<p>Take a look at the following video and asnwer the questions that appear.</p>",
+                                    "cy": "<p>Cymerwch olwg ar y fideo ac yna ateb y cewsitynau sy'n ymddangos.</p>"
                                 },
-                                {
-                                    "time": 9,
-                                    "comment": {
-                                        "en": "What do you think is missing here?",
-                                        "cy": ""
+                                "isYouTube": False,
+                                "path": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                                "questions": [
+                                    {
+                                        "time": 3,
+                                        "comment": {
+                                            "en": "What do you think of this statement?",
+                                            "cy": "Beth ydych yn meddwl o'r hyn?"
+                                        }
+                                    },
+                                    {
+                                        "time": 6,
+                                        "comment": {
+                                            "en": "Can you think of any other like this?",
+                                            "cy": ""
+                                        }
+                                    },
+                                    {
+                                        "time": 9,
+                                        "comment": {
+                                            "en": "What do you think is missing here?",
+                                            "cy": ""
+                                        }
                                     }
-                                }
-                            ]
-                        }
-                    },
-                )
-            messages.error(
-                request, f'Video with Question card with answer in Lesson {lesson_number}, Screen {screen_number}, add content {table.rows[0].cells[0].text}')
+                                ]
+                            }
+                        },
+                    )
+                    messages.error(
+                        request, f'Video with Question card with answer in Lesson {lesson_number}, Screen {screen_number}, add content {table.rows[0].cells[0].text}')
 
-            # Gallery Card"
-            if 'Gallery Card'.lower() in table.rows[0].cells[0].text.lower():
-                dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'].append(
-                    {
-                        "type": "gallery",
-                        "data": {
-                            "title": {
-                                "en": "Gallery",
-                                "cy": "Galeri"
-                            },
-                            "content": {
-                                "en": "Text Content",
-                                "cy": "_Text Content"
-                            },
-                            "photos": [
-                                {
-                                    "title": {
-                                        "en": "Image 1 title",
-                                        "cy": "_Image 1 title"
-                                    },
-                                    "content": {
-                                        "en": "Caption 1",
-                                        "cy": "_Caption"
-                                    },
-                                    "source": "https://resource.download.wjec.co.uk/vtc/2020-21/bL20-21_1-1/allegorical-portrait.jpg"
+                # Gallery Card"
+                if 'Gallery Card'.lower() in table.rows[0].cells[0].text.lower():
+                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'].append(
+                        {
+                            "type": "gallery",
+                            "data": {
+                                "title": {
+                                    "en": "Gallery",
+                                    "cy": "Galeri"
                                 },
-                                {
-                                    "title": {
-                                        "en": "Image 2 title",
-                                        "cy": "_Image 2 title"
-                                    },
-                                    "content": {
-                                        "en": "Caption 2",
-                                        "cy": "_Caption"
-                                    },
-                                    "source": "https://resource.download.wjec.co.uk/vtc/2020-21/bL20-21_1-1/armada-portrait.jpg"
+                                "content": {
+                                    "en": "Text Content",
+                                    "cy": "_Text Content"
                                 },
-                            ]
+                                "photos": [
+                                    {
+                                        "title": {
+                                            "en": "Image 1 title",
+                                            "cy": "_Image 1 title"
+                                        },
+                                        "content": {
+                                            "en": "Caption 1",
+                                            "cy": "_Caption"
+                                        },
+                                        "source": "https://resource.download.wjec.co.uk/vtc/2020-21/bL20-21_1-1/allegorical-portrait.jpg"
+                                    },
+                                    {
+                                        "title": {
+                                            "en": "Image 2 title",
+                                            "cy": "_Image 2 title"
+                                        },
+                                        "content": {
+                                            "en": "Caption 2",
+                                            "cy": "_Caption"
+                                        },
+                                        "source": "https://resource.download.wjec.co.uk/vtc/2020-21/bL20-21_1-1/armada-portrait.jpg"
+                                    },
+                                ]
+                            }
                         }
-                    }
-                )
-                messages.error(
-                    request, f'Gallery Card card with answer in Lesson {lesson_number}, Screen {screen_number}, add content {table.rows[0].cells[0].text}')
+                    )
+                    messages.error(
+                        request, f'Gallery Card card with answer in Lesson {lesson_number}, Screen {screen_number}, add content {table.rows[0].cells[0].text}')
 
             # HINT/SUPPORT
             # if 'HINT/SUPPORT'.lower() in table.rows[0].cells[0].text.lower():

@@ -25,7 +25,7 @@ SECRET_KEY = '!+vgn*3d)cd_fl_x1=pbbpskz^9d7!pe2d_$t4&b4&5^g_h-$*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['wjec-docs-scrapper.herokuapp.com']
+ALLOWED_HOSTS = ['wjec-docs-scrapper.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
