@@ -118,8 +118,8 @@ def scraper(request):
                                     "cy": ""
                                 },
                                 "content": {
-                                    # "en": table.rows[2].cells[0].text,
-                                    # "cy": table.rows[2].cells[1].text,
+                                    "en": table.rows[2].cells[0].text,
+                                    "cy": table.rows[2].cells[1].text,
                                     "_editorEn": "visual"
                                 }
                             },
@@ -150,8 +150,8 @@ def scraper(request):
                                     "cy": ""
                                 },
                                 "content": {
-                                    # "en": table.rows[2].cells[0].text,
-                                    # "cy": table.rows[2].cells[0].text,
+                                    "en": table.rows[2].cells[0].text,
+                                    "cy": table.rows[2].cells[0].text,
                                     "_editorEn": "visual"
                                 }
                             },
