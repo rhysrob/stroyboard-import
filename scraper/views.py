@@ -149,7 +149,7 @@ def scraper(request):
                         )
                         continue
                     except IndexError:
-                        messages.error(request, f'LESSON OBJECTIVES in lesson: {lesson_number}, screen: {screen_number} need to be added ')
+                        messages.error(request, f'LESSON OBJECTIVES card in lesson: {lesson_number}, screen: {screen_number} need to be added ')
 
 
                  # adding reading cards
@@ -248,7 +248,7 @@ def scraper(request):
                         )
                         continue
                     except IndexError:
-                        messages.error(request, f'Case study in lesson: {lesson_number}, screen: {screen_number} need to be added ')
+                        messages.error(request, f'Case study card in lesson: {lesson_number}, screen: {screen_number} need to be added ')
 
 
                 # Adding SPEAKING cards
@@ -272,7 +272,7 @@ def scraper(request):
                         )
                         continue
                     except IndexError:
-                        messages.error(request, f'Speaking in lesson: {lesson_number}, screen: {screen_number} need to be added ')
+                        messages.error(request, f'Speaking card in lesson: {lesson_number}, screen: {screen_number} need to be added ')
 
 
                 # Adding SUMMARY cards
@@ -415,7 +415,7 @@ def scraper(request):
                         messages.error(request, f' There is a video in Lesson {lesson_number}, Screen {screen_number}, make sure is the right link')
                         continue
                     except IndexError:
-                        messages.error(request, f'Video block in lesson: {lesson_number}, screen: {screen_number} need to be addded ')
+                        messages.error(request, f'Video block card in lesson: {lesson_number}, screen: {screen_number} need to be addded ')
 
                 # Sortable into Columns
                 if 'Sortable into Columns' in table.rows[0].cells[0].text:
@@ -494,7 +494,7 @@ def scraper(request):
                             )
                             continue
                     except IndexError:
-                        messages.error(request, f'Sortable into Columns in lesson: {lesson_number}, screen: {screen_number} need to be added')
+                        messages.error(request, f'Sortable into Columns card in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
                 # 'REFLECTION card'
                 if 'REFLECTION' in table.rows[0].cells[0].text:
@@ -518,7 +518,7 @@ def scraper(request):
                         continue
                     except IndexError:
                         messages.error(
-                        request, f'REFLECTION Lesson {lesson_number}, Screen {screen_number}, need to be added')
+                        request, f'REFLECTION card in Lesson {lesson_number}, Screen {screen_number}, need to be added')
 
                 # carousel card
                 if 'carousel' in table.rows[0].cells[0].text.lower():
@@ -558,7 +558,7 @@ def scraper(request):
                         )
                         continue
                     except IndexError:
-                        messages.error(request, f'carousel in lesson: {lesson_number}, screen: {screen_number} need to be added ')
+                        messages.error(request, f'carousel card in lesson: {lesson_number}, screen: {screen_number} need to be added ')
 
 
                  # OPINION
@@ -580,7 +580,7 @@ def scraper(request):
                         )
                         continue
                     except IndexError:
-                        messages.error(request, f'LESSON OBJECTIVES in lesson: {lesson_number}, screen: {screen_number} need to be added')
+                        messages.error(request, f'OPINION card in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
                 # Multi-choice
                 if 'Multi-choice with 1 correct answer'.lower() in table.rows[0].cells[0].text.lower():
@@ -634,7 +634,7 @@ def scraper(request):
                         )
                         continue
                     except IndexError:
-                        messages.error(request, f'Multi-choice with 1 correct answer in lesson: {lesson_number}, screen: {screen_number} need to be added')
+                        messages.error(request, f'Multi-choice with 1 correct answer card in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
 
                 # Fill the gaps drodown cards
@@ -697,7 +697,7 @@ def scraper(request):
                         )
                         continue
                     except IndexError:
-                        messages.error(request, f'Fill the gaps – dropdown in lesson: {lesson_number}, screen: {screen_number} need to be added')
+                        messages.error(request, f'Fill the gaps – dropdown card in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
 
                  # Fill the gaps typing card
@@ -724,7 +724,7 @@ def scraper(request):
                         )
                         continue
                     except IndexError:
-                        messages.error(request, f'Fill the gaps – Typing: {lesson_number}, screen: {screen_number} need to be added')
+                        messages.error(request, f'Fill the gaps – Typing card in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
                  # Question & Answer card
                 if 'Question & Answer'.lower() in table.rows[0].cells[0].text.lower():
@@ -767,7 +767,7 @@ def scraper(request):
                         )
                         continue
                     except IndexError:
-                        messages.error(request, f'Question & Answer in lesson: {lesson_number}, screen: {screen_number} need to be added')
+                        messages.error(request, f'Question & Answer card in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
 
                 # Random question generator with answer
@@ -836,7 +836,7 @@ def scraper(request):
                         )
                         continue
                     except IndexError:
-                        messages.error(request, f'Random question generator with answer in lesson: {lesson_number}, screen: {screen_number} need to be added')
+                        messages.error(request, f'Random question generator with answer card in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
                 # Random question generator -no answer
                 if 'Random question generator - no answer'.lower() in table.rows[0].cells[0].text.lower():
@@ -904,7 +904,7 @@ def scraper(request):
                         )
                         continue
                     except IndexError:
-                        messages.error(request, f'Random question generator - no answer in lesson: {lesson_number}, screen: {screen_number} need to be added')
+                        messages.error(request, f'Random question generator - no answer card in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
                 # Image Carousel block
                 if 'Image Carousel block'.lower() in table.rows[0].cells[0].text.lower():
@@ -943,7 +943,7 @@ def scraper(request):
                         )
                         continue
                     except IndexError:
-                        messages.error(request, f'Image Carousel block in lesson: {lesson_number}, screen: {screen_number} need to be added')
+                        messages.error(request, f'Image Carousel block card in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
                 # Sound block
                 if 'Sound block'.lower() in table.rows[0].cells[0].text.lower():
@@ -991,7 +991,7 @@ def scraper(request):
                         )
                         continue
                     except IndexError:
-                        messages.error(request, f'Download block in lesson: {lesson_number}, screen: {screen_number} need to be added')
+                        messages.error(request, f'Download block card in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
                 # GLOSSARY
                 if 'GLOSSARY'.lower() in table.rows[0].cells[0].text.lower():
@@ -1052,7 +1052,7 @@ def scraper(request):
                         )
                         continue
                     except IndexError:
-                        messages.error(request, f'Static text – TEST YOURSELF (for past paper questions only) in lesson: {lesson_number}, screen: {screen_number} need to be added')
+                        messages.error(request, f'Static text – TEST YOURSELF (for past paper questions only) card in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
                 # MARK YOURSELF
                 if 'Static text – MARK YOURSELF  (for past paper questions only)'.lower() in table.rows[0].cells[0].text.lower():
@@ -1080,7 +1080,7 @@ def scraper(request):
                         )
                         continue
                     except IndexError:
-                        messages.error(request, f'Static text – MARK YOURSELF  (for past paper questions only) in lesson: {lesson_number}, screen: {screen_number} need to be added')
+                        messages.error(request, f'Static text – MARK YOURSELF  (for past paper questions only) card in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
                  # True or False
                 if 'True or False'.lower() in table.rows[0].cells[0].text.lower():
@@ -1250,7 +1250,7 @@ def scraper(request):
                         )
                         continue
                     except IndexError:
-                        messages.error(request, f'Structured Framework(sortable) in lesson: {lesson_number}, screen: {screen_number} need to be added')
+                        messages.error(request, f'Structured Framework(sortable) card in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
                 # Thought shower
                 if 'Thought shower'.lower() in table.rows[0].cells[0].text.lower():
