@@ -76,27 +76,32 @@ def scraper(request):
                                 request, f'LESSON: {lesson_number}, screen: {screen_number} need to be added')
 
                         # adding screens
-                        if "Screen".lower() in table.rows[2].cells[0].text.lower():
-                            try:
-                                dic['lessons'][lesson_number - 1]['subLessons'].append(
-                                    {
-                                        "title": {
-                                            "en": table.rows[2].cells[1].text,
-                                            "cy": table.rows[2].cells[2].text,
-                                        },
-                                        "slug": "slug",
-                                        "cards": []
-                                    }
+                        try:
+                            if "Screen".lower() in table.rows[2].cells[0].text.lower():
+                                try:
+                                    dic['lessons'][lesson_number - 1]['subLessons'].append(
+                                        {
+                                            "title": {
+                                                "en": table.rows[2].cells[1].text,
+                                                "cy": table.rows[2].cells[2].text,
+                                            },
+                                            "slug": "slug",
+                                            "cards": []
+                                        }
 
-                                )
-                                screen_number += 1
-                                if table.rows[2].cells[1].text == '':
+                                    )
+                                    screen_number += 1
+                                    if table.rows[2].cells[1].text == '':
+                                        messages.error(
+                                            request, f'{lesson_number}, {screen_number} is empty,  {table.rows[2].cells[0].text}')
+                                    continue
+                                except IndexError:
                                     messages.error(
-                                        request, f'{lesson_number}, {screen_number} is empty,  {table.rows[2].cells[0].text}')
-                                continue
-                            except IndexError:
-                                messages.error(
-                                    request, f'Screen in lesson: {lesson_number}, screen: {screen_number} need to be added')
+                                        request, f'Screen in lesson: {lesson_number}, screen: {screen_number} need to be added')
+                            continue
+                        except IndexError:
+                            messages.error(request, f'Screen in lesson: {lesson_number}, screen: {screen_number} need to be added')
+
 
                     elif "Screen".lower() in table.rows[1].cells[0].text.lower():
                         try:
