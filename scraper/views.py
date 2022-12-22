@@ -10,6 +10,7 @@ def scraper(request):
     dic = {}
     lesson_number = 0
     screen_number = 0
+    card_number = 0
 
     if request.POST:
         if not files:
@@ -91,6 +92,7 @@ def scraper(request):
 
                                     )
                                     screen_number += 1
+                                    card_number = 0
                                     if table.rows[2].cells[1].text == '':
                                         messages.error(
                                             request, f'{lesson_number}, {screen_number} is empty,  {table.rows[2].cells[0].text}')
@@ -100,8 +102,8 @@ def scraper(request):
                                         request, f'Screen in lesson: {lesson_number}, screen: {screen_number} need to be added')
                             continue
                         except IndexError:
-                            messages.error(request, f'Screen in lesson: {lesson_number}, screen: {screen_number} need to be added')
-
+                            messages.error(
+                                request, f'Screen in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
                     elif "Screen".lower() in table.rows[1].cells[0].text.lower():
                         try:
@@ -117,6 +119,7 @@ def scraper(request):
 
                             )
                             screen_number += 1
+                            card_number = 0
                             continue
                         except IndexError:
                             messages.error(
@@ -153,6 +156,7 @@ def scraper(request):
                                 "downloadFiles": []
                             },
                         )
+                        card_number + 1
                         continue
                     except IndexError:
                         messages.error(
@@ -190,6 +194,37 @@ def scraper(request):
                                 "downloadFiles": []
                             },
                         )
+                        card_number + 1
+                        try:
+                            if table.rows[3].cells[0].text:
+                                for i in range(3, len(table.rows)):
+                                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
+                                                                                                                1]['data']['content']['en'] += f'<p>{table.rows[i].cells[0].text}</p>\n'
+                                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
+                                                                                                                1]['data']['content']['cy'] += f'<p>{table.rows[i].cells[1].text}</p>\n'
+                        except IndexError:
+                            continue
+
+                        try:
+                            if table.rows[4].cells[0].text:
+                                for i in range(4, len(table.rows)):
+                                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
+                                                                                                                1]['data']['content']['en'] += f'<p>{table.rows[i].cells[0].text}</p>\n'
+                                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
+                                                                                                                1]['data']['content']['cy'] += f'<p>{table.rows[i].cells[1].text}</p>\n'
+                        except IndexError:
+                            continue
+
+                        try:
+                            if table.rows[7].cells[0].text:
+                                print('yes table->')
+                                for i in range(5, len(table.rows)):
+                                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
+                                                                                                                1]['data']['content']['en'] += f'<p>{table.rows[i].cells[0].text}</p>\n'
+                                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
+                                                                                                                1]['data']['content']['cy'] += f'<p>{table.rows[i].cells[1].text}</p>\n'
+                        except IndexError:
+                            continue
                         continue
                     except IndexError:
                         messages.error(
@@ -227,6 +262,7 @@ def scraper(request):
                                 "downloadFiles": []
                             },
                         )
+                        card_number + 1
                         continue
                     except IndexError:
                         messages.error(
@@ -251,6 +287,7 @@ def scraper(request):
                                 },
                             },
                         )
+                        card_number + 1
                         continue
                     except IndexError:
                         messages.error(
@@ -275,6 +312,7 @@ def scraper(request):
                                 },
                             },
                         )
+                        card_number + 1
                         continue
                     except IndexError:
                         messages.error(
@@ -299,6 +337,7 @@ def scraper(request):
                                 },
                             },
                         )
+                        card_number + 1
                         continue
                     except IndexError:
                         messages.error(
@@ -323,6 +362,7 @@ def scraper(request):
                                 },
                             },
                         )
+                        card_number + 1
                         continue
                     except IndexError:
                         messages.error(
@@ -377,6 +417,7 @@ def scraper(request):
                                     "downloadFiles": []
                                 },
                             )
+                            card_number + 1
                             messages.error(
                                 request, f'You need to add the Mistake manually in "spot the mistake activity" located in  lesson number: {lesson_number}, and screen {screen_number}')
                             continue
@@ -417,13 +458,14 @@ def scraper(request):
                                 "downloadFiles": []
                             },
                         )
+                        card_number + 1
                         continue
                     except IndexError:
                         messages.error(
                             request, f'Video block card in lesson: {lesson_number}, screen: {screen_number} need to be addded ')
 
                 # Sortable into Columns
-                # ------------------------------------------------------------------------------------------------------ loop through the content
+                # ------------------------------------------------------------------------------------------------------ list later loop through the content
                 if 'Sortable into Columns' in table.rows[0].cells[0].text:
                     try:
                         for i in range(3, len(table.rows)):
@@ -470,14 +512,14 @@ def scraper(request):
                                                 "id": "col-1637836109525.1797",
                                                 "title": {
                                                     "en": 'headings column here',
-                                                    "cy": "Food CY"
+                                                    "cy": "headings column here CY"
                                                 }
                                             },
                                             {
                                                 "id": "col-1637836109379.3835",
                                                 "title": {
                                                     "en": 'headings column here',
-                                                    "cy": "Drinks CY"
+                                                    "cy": "headings column here CY"
                                                 }
                                             }
                                         ]
@@ -498,6 +540,7 @@ def scraper(request):
                                 },
 
                             )
+                            card_number + 1
                             continue
                     except IndexError:
                         messages.error(
@@ -522,6 +565,7 @@ def scraper(request):
                             }
 
                         )
+                        card_number + 1
                         continue
                     except IndexError:
                         messages.error(
@@ -545,6 +589,7 @@ def scraper(request):
                                 }
                             },
                         )
+                        card_number + 1
                         continue
                     except IndexError:
                         messages.error(
@@ -567,6 +612,7 @@ def scraper(request):
                                 }
                             }
                         )
+                        card_number + 1
                         continue
                     except IndexError:
                         messages.error(
@@ -579,55 +625,74 @@ def scraper(request):
                             {
                                 "type": "mcq",
                                 "data": {
-                                        "title": {
-                                            "en": "",
-                                            "cy": ""
-                                        },
+                                    "title": {
+                                        "en": "",
+                                        "cy": ""
+                                    },
                                     "content": {
-                                            "en": "Click on the answer you think is correct.",
-                                            "cy": "Cliciwch ar yr ateb rydych chi'n credu sy'n gywir."
+                                        "en": "<p>Select the answer you think is correct.</p>",
+                                        "cy": "<p>Dewiswch bob ateb sy’n gywir, yn eich barn chi.</p>\n"
                                     },
                                     "question": {
-                                            "en": table.rows[2].cells[0].text,
-                                            "cy": table.rows[2].cells[1].text,
+                                        "en": table.rows[2].cells[0].text,
+                                        "cy": table.rows[2].cells[1].text,
+                                        "_editorEn": "visual"
+                                    },
+                                    "feedback": {
+                                        "en": "",
+                                        "cy": ""
                                     },
                                     "choices": [
-                                            {
-                                                "answer": {
-                                                    "en": "Blue",
-                                                    "cy": "Glas"
-                                                },
-                                                "correct": True
-                                            },
-                                            {
-                                                "answer": {
-                                                    "en": "Red",
-                                                    "cy": "Coch"
-                                                },
-                                                "correct": False
-                                            },
-                                            {
-                                                "answer": {
-                                                    "en": "Yellow",
-                                                    "cy": "Melyn"
-                                                },
-                                                "correct": False
-                                            }
                                     ],
-                                    "feedback": {
-                                            "en": "Optional <span data-glossary='something abour something.'>Word</span>",
-                                            "cy": "Adborth opsiynol"
-                                    }
-                                }
-                            }
+                                    "disableShuffleStatements": False
+                                },
+                                "answer": {
+                                    "en": "",
+                                    "cy": ""
+                                },
+                                "hint": {
+                                    "en": "",
+                                    "cy": ""
+                                },
+                                "extension": {
+                                    "en": "",
+                                    "cy": ""
+                                },
+                                "downloadFiles": []
+                            },
 
                         )
-                        continue
+                        card_number + 1
+                        try:
+                            for i in range(3, len(table.rows)):
+                                if table.rows[3].cells[0].text == table.rows[i].cells[0].text :
+                                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['data']['choices'].append(
+                                        {
+                                            "answer": {
+                                                "en": table.rows[i].cells[0].text,
+                                                "cy": table.rows[i].cells[1].text
+                                            },
+                                            "correct": True
+                                        }
+                                    )
+                                else:
+                                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['data']['choices'].append(
+                                        {
+                                            "answer": {
+                                                "en": table.rows[i].cells[0].text,
+                                                "cy": table.rows[i].cells[1].text
+                                            },
+                                            "correct": False
+                                        }
+                                    )
+                            continue
+                        except IndexError:
+                            continue
                     except IndexError:
                         messages.error(
                             request, f'Multi-choice with 1 correct answer card in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
-                # ------------------------------------------------------------------------------------------------------ loop through the content
+                # ------------------------------------------------------------------------------------------------------Done loop through the content
                 # Fill the gaps drodown cards
                 if 'Fill the gaps – dropdown'.lower() in table.rows[0].cells[0].text.lower():
                     try:
@@ -636,58 +701,89 @@ def scraper(request):
                                 "type": "fillBlankDropdown",
                                 "data": {
                                     "title": {
-                                        "en": "Fill in the blanks (Dropdown)",
-                                        "cy": "cy_Fill in the blanks (Dropdown)"
+                                        "en": "",
+                                        "cy": ""
                                     },
                                     "content": {
-                                        "en": "<p>Select your answers from the dropdowns to fill the gaps.</p>",
-                                        "cy": "<p>cy_Select your answers from the dropdowns to fill the gaps.</p>"
+                                        "en": "",
+                                        "cy": ""
+                                    },
+                                    "activityContent": {
+                                        "en": '',
+                                        "cy": "",
+                                        "_editorEn": "code"
                                     },
                                     "options": {
                                         "en": [
                                             [
-                                                "were",
-                                                "war",
-                                                "army"
+                                                "suspicious",
+                                                "happy",
+                                                "fearful",
+                                                "excited",
+                                                "enthralled"
                                             ],
                                             [
-                                                "one",
-                                                "two",
-                                                "three"
+                                                "banquet",
+                                                "meeting",
+                                                "War Council ",
+                                                "conference"
                                             ],
                                             [
-                                                "1",
-                                                "2",
-                                                "3"
+                                                "Fleance",
+                                                "Malcolm",
+                                                "Donalbain",
+                                                "Ross",
+                                                "Lennox"
+                                            ],
+                                            [
+                                                "murderers",
+                                                "servants ",
+                                                "friends",
+                                                "bodyguards"
+                                            ],
+                                            [
+                                                "fear",
+                                                "joy",
+                                                "expectation",
+                                                "optimism",
+                                                "pessimism"
                                             ]
                                         ],
-                                        "cy": [
-                                            [
-                                                "cy_were",
-                                                "cy_war",
-                                                "cy_army"
-                                            ],
-                                            [
-                                                "cy_un",
-                                                "cy_dai",
-                                                "cy_tri"
-                                            ],
-                                            [
-                                                "cy_1",
-                                                "cy_2",
-                                                "cy_3"
-                                            ]
-                                        ]
-                                    },
-                                    "activityContent": {
-                                        "en": table.rows[2].cells[0].text,
-                                        "cy": table.rows[2].cells[1].text
+                                        "cy": []
                                     }
-                                }
+                                },
+                                "answer": {
+                                    "en": "",
+                                    "cy": ""
+                                },
+                                "hint": {
+                                    "en": "",
+                                    "cy": ""
+                                },
+                                "extension": {
+                                    "en": "",
+                                    "cy": ""
+                                },
+                                "downloadFiles": []
                             }
+
                         )
-                        messages.error(
-                            request, f'Fill the gaps – dropdown card in lesson: {lesson_number}, screen: {screen_number}')
+                        card_number + 1
+                        try:
+                            for i in range(2, len(table.rows)):
+                                dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
+                                                                                                            1]['data']['activityContent']['en'] += f'<p>{table.rows[i].cells[0].text}</p>\n'
+                                dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
+                                                                                                            1]['data']['activityContent']['cy'] += f'<p>{table.rows[i].cells[2].text}</p>\n'
+                                # appending the answers
+                                dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
+                                                                                                            1]['data']['options']['en'].append([table.rows[i].cells[1].text])
+                                dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
+                                                                                                            1]['data']['options']['cy'].append([table.rows[i].cells[3].text])
+                            messages.error(
+                                request, f'Fill the gaps – dropdown card in lesson: {lesson_number}, screen: {screen_number} need to add dropdown')
+                        except IndexError:
+                            continue
                         continue
                     except IndexError:
                         messages.error(
@@ -702,20 +798,45 @@ def scraper(request):
                                 "type": "fillBlankText",
                                 "data": {
                                     "title": {
-                                        "en": "Fill in the blanks (Text)",
-                                        "cy": "cy_Fill in the blanks (Text)"
+                                        "en": "",
+                                        "cy": ""
                                     },
                                     "content": {
-                                        "en": "<p>Type your answers into the gaps.</p>",
-                                        "cy": "<p>cy_Type your answers into the gaps.</p>"
+                                        "en": "",
+                                        "cy": ""
                                     },
                                     "activityContent": {
-                                        "en": "<p>The recruits <input type=\"text\" class=\"blank-input\" data-answer=\"were\" /> mostly <input type=\"text\" class=\"blank-input\" data-answer=\"war\" /> veterans and junior <input type=\"text\" class=\"blank-input\" data-answer=\"army\" /> officers, who were violently anti-communist.</p>",
-                                        "cy": "<p>The recruits <input type=\"text\" class=\"blank-input\" data-answer=\"were\" /> mostly <input type=\"text\" class=\"blank-input\" data-answer=\"war\" /> veterans and junior <input type=\"text\" class=\"blank-input\" data-answer=\"army\" /> officers, who were violently anti-communist.</p>"
+                                        "en": "",
+                                        "cy": "",
+                                        "_editorEn": "code"
                                     }
-                                }
-                            }
+                                },
+                                "answer": {
+                                    "en": "",
+                                    "cy": ""
+                                },
+                                "hint": {
+                                    "en": "",
+                                    "cy": ""
+                                },
+                                "extension": {
+                                    "en": "",
+                                    "cy": ""
+                                },
+                                "downloadFiles": []
+                            },
                         )
+                        card_number + 1
+                        try:
+                            for i in range(2, len(table.rows)):
+                                dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
+                                                                                                            1]['data']['activityContent']['en'] += f'<p>{table.rows[i].cells[0].text}</p>\n'
+                                dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
+                                                                                                            1]['data']['activityContent']['cy'] += f'<p>{table.rows[i].cells[1].text}</p>\n'
+                            messages.error(
+                                request, f'Fill the gaps – Typing card in lesson: {lesson_number}, screen: {screen_number} need to add input')
+                        except IndexError:
+                            continue
                         continue
                     except IndexError:
                         messages.error(
@@ -751,6 +872,7 @@ def scraper(request):
                                         }
                             }
                         )
+                        card_number + 1
                         continue
                     except IndexError:
                         messages.error(
@@ -797,6 +919,7 @@ def scraper(request):
                                 "downloadFiles": []
                             }
                         )
+                        card_number + 1
                         continue
                     except IndexError:
                         messages.error(
@@ -867,6 +990,7 @@ def scraper(request):
                                 "downloadFiles": []
                             }
                         )
+                        card_number + 1
                         continue
                     except IndexError:
                         messages.error(
@@ -891,6 +1015,7 @@ def scraper(request):
                                 }
                             },
                         )
+                        card_number + 1
                         continue
                     except IndexError:
                         messages.error(
@@ -914,6 +1039,7 @@ def scraper(request):
                                 }
                             }
                         )
+                        card_number + 1
                         continue
                     except IndexError:
                         messages.error(
@@ -942,48 +1068,23 @@ def scraper(request):
                                 }
                             }
                         )
+                        card_number + 1
                         continue
                     except IndexError:
                         messages.error(
                             request, f'Download block card in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
-
                 # GLOSSARY
                 # ------------------------------------------------------------------------------------------------------ loop through the content
                 if 'GLOSSARY'.lower() in table.rows[0].cells[0].text.lower():
                     try:
-                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'].append(
-                            {
-                                "type": "read",
-                                "downloadFiles": [
-                                    {
-                                        "fileName": {
-                                            "en": "",
-                                            "cy": ""
-                                        },
-                                        "url": {
-                                            "en": "",
-                                            "cy": ""
-                                        }
-                                    }
-                                ],
-                                "data": {
-                                    "title": {
-                                        "en": "",
-                                        "cy": ""
-                                    },
-                                    "content": {
-                                        "en": table.rows[2].cells[0].text,
-                                        "cy": table.rows[2].cells[1].text
-                                }
-                                }
-                            }
-                        )
-                        continue
+                        if table.rows[2].cells[0].text.lower().strip() in dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['data']['content']['en'].lower():
+                            dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
+                                                                                                        1]['data']['content']['en'] += f'<span data-glossary=\"{table.rows[2].cells[1].text}\">{table.rows[2].cells[0].text}</span>'
                     except IndexError:
                         messages.error(
-                            request, f'GLOSSARY card with answer in Lesson {lesson_number}, Screen {screen_number}, need to be check')
-                        
+                            request, f'GLOSSARY {lesson_number}, screen: {screen_number} need to be in the correct position')
+                        continue
 
                 # TEST YOURSELF
                 if 'Static text – TEST YOURSELF (for past paper questions only)'.lower() in table.rows[0].cells[0].text.lower():
@@ -1008,6 +1109,7 @@ def scraper(request):
                                         }
                             }
                         )
+                        card_number + 1
                         continue
                     except IndexError or TypeError:
                         messages.error(
@@ -1037,13 +1139,14 @@ def scraper(request):
                             }
 
                         )
+                        card_number + 1
                         continue
                     except IndexError:
                         messages.error(
                             request, f'Static text – MARK YOURSELF  (for past paper questions only) card in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
                  # True or False
-                # ------------------------------------------------------------------------------------------------------ loop through the content
+                # ------------------------------------------------------------------------------------------------------ list loop through the content
                 if 'True or False'.lower() in table.rows[0].cells[0].text.lower():
                     try:
                         dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'].append(
@@ -1053,77 +1156,78 @@ def scraper(request):
                                     "title": {
                                         "en": table.rows[1].cells[0].text,
                                         "cy": table.rows[1].cells[1].text}
-                                    },
-                                    "content": {
-                                        "en": table.rows[3].cells[0].text,
-                                        "cy": table.rows[3].cells[1].text
+                                },
+                                "content": {
+                                    "en": table.rows[3].cells[0].text,
+                                    "cy": table.rows[3].cells[1].text
 
-                                    },
-                                    "activityContent": [
-                                        [
-                                            {
-                                                "str": {
-                                                    "en": "A1",
-                                                    "cy": "A1_CY"
-                                                },
-                                                "correct": True
+                                },
+                                "activityContent": [
+                                    [
+                                        {
+                                            "str": {
+                                                "en": "A1",
+                                                "cy": "A1_CY"
                                             },
-                                            {
-                                                "str": {
-                                                    "en": "A2",
-                                                    "cy": "A2_CY"
-                                                }
+                                            "correct": True
+                                        },
+                                        {
+                                            "str": {
+                                                "en": "A2",
+                                                "cy": "A2_CY"
                                             }
-                                        ],
-                                        [
-                                            {
-                                                "str": {
-                                                    "en": "B1",
-                                                    "cy": "B1_Cy"
-                                                },
-                                                "correct": True
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "str": {
+                                                "en": "B1",
+                                                "cy": "B1_Cy"
                                             },
-                                            {
-                                                "str": {
-                                                    "en": "B2",
-                                                    "cy": "B2_CY"
-                                                }
+                                            "correct": True
+                                        },
+                                        {
+                                            "str": {
+                                                "en": "B2",
+                                                "cy": "B2_CY"
                                             }
-                                        ],
-                                        [
-                                            {
-                                                "str": {
-                                                    "en": "C1",
-                                                    "cy": "C1_CY"
-                                                },
-                                                "correct": True
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "str": {
+                                                "en": "C1",
+                                                "cy": "C1_CY"
                                             },
-                                            {
-                                                "str": {
-                                                    "en": "C2",
-                                                    "cy": "C2_CY"
-                                                }
+                                            "correct": True
+                                        },
+                                        {
+                                            "str": {
+                                                "en": "C2",
+                                                "cy": "C2_CY"
                                             }
-                                        ],
-                                        [
-                                            {
-                                                "str": {
-                                                    "en": "D1",
-                                                    "cy": "D1_Cy"
-                                                },
-                                                "correct": True
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "str": {
+                                                "en": "D1",
+                                                "cy": "D1_Cy"
                                             },
-                                            {
-                                                "str": {
-                                                    "en": "D2",
-                                                    "cy": "D2_CY"
-                                                }
+                                            "correct": True
+                                        },
+                                        {
+                                            "str": {
+                                                "en": "D2",
+                                                "cy": "D2_CY"
                                             }
-                                        ]
+                                        }
                                     ]
-                                }
+                                ]
+                            }
 
                         )
+                        card_number + 1
                         continue
                     except IndexError:
                         messages.error(
@@ -1211,6 +1315,7 @@ def scraper(request):
                                 }
                             }
                         )
+                        card_number + 1
                         continue
                     except IndexError:
                         messages.error(
@@ -1251,6 +1356,7 @@ def scraper(request):
                                 "downloadFiles": []
                             }
                         )
+                        card_number + 1
                         continue
                     except IndexError:
                         messages.error(
@@ -1303,13 +1409,14 @@ def scraper(request):
                                 }
                             },
                         )
+                        card_number + 1
                         continue
                     except IndexError:
                         messages.error(
                             request, f'Video with Question card with answer in Lesson {lesson_number}, Screen {screen_number}, add content {table.rows[0].cells[0].text}')
 
                 # Gallery Card"
-                # ------------------------------------------------------------------------------------------------------ check this activity
+                # ------------------------------------------------------------------------------------------------------ list check this activity
                 if 'Gallery Card'.lower() in table.rows[0].cells[0].text.lower():
                     try:
                         dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'].append(
@@ -1351,6 +1458,7 @@ def scraper(request):
                                 }
                             }
                         )
+                        card_number + 1
                         continue
                     except IndexError:
                         messages.error(
@@ -1361,25 +1469,23 @@ def scraper(request):
     context = {'dic': dic}
     return render(request, 'scraper.html', context)
 
+    # HINT/SUPPORT
+    # if 'HINT/SUPPORT'.lower() in table.rows[0].cells[0].text.lower():
 
-                        # HINT/SUPPORT
-                    # if 'HINT/SUPPORT'.lower() in table.rows[0].cells[0].text.lower():
+    #     )
+    #     messages.error(
+    #         request, f'HINT/SUPPORT  card with answer in Lesson {lesson_number}, Screen {screen_number}, add content {table.rows[0].cells[0].text}')
 
-                    #     )
-                    #     messages.error(
-                    #         request, f'HINT/SUPPORT  card with answer in Lesson {lesson_number}, Screen {screen_number}, add content {table.rows[0].cells[0].text}')
+    # EXTENSION
+    # if 'EXTENSION'.lower() in table.rows[0].cells[0].text.lower():
 
-                    # EXTENSION
-                    # if 'EXTENSION'.lower() in table.rows[0].cells[0].text.lower():
+    #     messages.error(
+    #         request, f'EXTENSION card with answer in Lesson {lesson_number}, Screen {screen_number}, add content {table.rows[0].cells[0].text}')
 
-                    #     messages.error(
-                    #         request, f'EXTENSION card with answer in Lesson {lesson_number}, Screen {screen_number}, add content {table.rows[0].cells[0].text}')
+    # ANSWER
+    # if 'ANSWER'.lower() in table.rows[0].cells[0].text.lower():
 
-                    # ANSWER
-                    # if 'ANSWER'.lower() in table.rows[0].cells[0].text.lower():
+    #     messages.error(
+    #         request, f'ANSWER card with answer in Lesson {lesson_number}, Screen {screen_number}, add content {table.rows[0].cells[0].text}')
 
-                    #     messages.error(
-                    #         request, f'ANSWER card with answer in Lesson {lesson_number}, Screen {screen_number}, add content {table.rows[0].cells[0].text}')
-
-                    #  if the uopload is successful
-
+    #  if the uopload is successful
