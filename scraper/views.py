@@ -2,6 +2,7 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from docx import Document
 import json
+from .utils import add_static_card_content, loop_though_table_content
 
 
 # Create your views here.
@@ -136,8 +137,8 @@ def scraper(request):
                                         "cy": ""
                                     },
                                     "content": {
-                                        "en": table.rows[2].cells[0].text,
-                                        "cy": table.rows[2].cells[1].text,
+                                        "en": '',
+                                        "cy": '',
                                         "_editorEn": "visual"
                                     }
                                 },
@@ -157,6 +158,11 @@ def scraper(request):
                             },
                         )
                         card_number + 1
+                        add_static_card_content(dic, lesson_number, screen_number, card_number, table)
+                        loop_though_table_content(3, dic,lesson_number,screen_number,card_number,table)
+                        loop_though_table_content(4, dic,lesson_number,screen_number,card_number,table)
+                        loop_though_table_content(5, dic,lesson_number,screen_number,card_number,table)
+                        loop_though_table_content(6, dic,lesson_number,screen_number,card_number,table)
                         continue
                     except IndexError:
                         messages.error(
@@ -174,8 +180,8 @@ def scraper(request):
                                         "cy": ""
                                     },
                                     "content": {
-                                        "en": table.rows[2].cells[0].text,
-                                        "cy": table.rows[2].cells[1].text,
+                                        "en": '',
+                                        "cy": '',
                                         "_editorEn": "visual"
                                     }
                                 },
@@ -195,40 +201,16 @@ def scraper(request):
                             },
                         )
                         card_number + 1
-                        try:
-                            if table.rows[3].cells[0].text:
-                                for i in range(3, len(table.rows)):
-                                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
-                                                                                                                1]['data']['content']['en'] += f'<p>{table.rows[i].cells[0].text}</p>\n'
-                                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
-                                                                                                                1]['data']['content']['cy'] += f'<p>{table.rows[i].cells[1].text}</p>\n'
-                        except IndexError:
-                            continue
-
-                        try:
-                            if table.rows[4].cells[0].text:
-                                for i in range(4, len(table.rows)):
-                                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
-                                                                                                                1]['data']['content']['en'] += f'<p>{table.rows[i].cells[0].text}</p>\n'
-                                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
-                                                                                                                1]['data']['content']['cy'] += f'<p>{table.rows[i].cells[1].text}</p>\n'
-                        except IndexError:
-                            continue
-
-                        try:
-                            if table.rows[7].cells[0].text:
-                                print('yes table->')
-                                for i in range(5, len(table.rows)):
-                                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
-                                                                                                                1]['data']['content']['en'] += f'<p>{table.rows[i].cells[0].text}</p>\n'
-                                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
-                                                                                                                1]['data']['content']['cy'] += f'<p>{table.rows[i].cells[1].text}</p>\n'
-                        except IndexError:
-                            continue
+                        add_static_card_content(
+                            dic, lesson_number, screen_number, card_number, table)
+                        loop_though_table_content(3, dic,lesson_number,screen_number,card_number,table)
+                        loop_though_table_content(4, dic,lesson_number,screen_number,card_number,table)
+                        loop_though_table_content(5, dic,lesson_number,screen_number,card_number,table)
+                        loop_though_table_content(6, dic,lesson_number,screen_number,card_number,table)
                         continue
                     except IndexError:
                         messages.error(
-                            request, f' Reading card in Lesson {lesson_number}, Screen {screen_number} need to be added')
+                            request, f' Reading card in Lesson {lesson_number}, Screen {screen_number} need to add content')
 
                 # adding WRITING cards
                 if "WRITING".lower() in table.rows[0].cells[0].text.lower():
@@ -242,8 +224,8 @@ def scraper(request):
                                         "cy": ""
                                     },
                                     "content": {
-                                        "en": table.rows[2].cells[0].text,
-                                        "cy": table.rows[2].cells[1].text,
+                                        "en": '',
+                                        "cy": '',
                                         "_editorEn": "visual"
                                     }
                                 },
@@ -263,10 +245,12 @@ def scraper(request):
                             },
                         )
                         card_number + 1
+                        add_static_card_content(
+                            dic, lesson_number, screen_number, card_number, table)
                         continue
                     except IndexError:
                         messages.error(
-                            request, f'WRITING Card in lesson: {lesson_number}, screen: {screen_number} need to be added')
+                            request, f'WRITING Card in lesson: {lesson_number}, screen: {screen_number} need to add content')
 
                 # Adding CASE STUDY cards
                 if "case study" in table.rows[0].cells[0].text.lower():
@@ -280,14 +264,16 @@ def scraper(request):
                                         "cy": ""
                                     },
                                     "content": {
-                                        "en": table.rows[2].cells[0].text,
-                                        "cy": table.rows[2].cells[1].text,
+                                        "en": '',
+                                        "cy": '',
                                         "_editorEn": "visual"
                                     }
                                 },
                             },
                         )
                         card_number + 1
+                        add_static_card_content(
+                            dic, lesson_number, screen_number, card_number, table)
                         continue
                     except IndexError:
                         messages.error(
@@ -305,18 +291,20 @@ def scraper(request):
                                         "cy": ""
                                     },
                                     "content": {
-                                        "en": table.rows[2].cells[0].text,
-                                        "cy": table.rows[2].cells[1].text,
+                                        "en": '',
+                                        "cy": '',
                                         "_editorEn": "visual"
                                     }
                                 },
                             },
                         )
                         card_number + 1
+                        add_static_card_content(
+                            dic, lesson_number, screen_number, card_number, table)
                         continue
                     except IndexError:
                         messages.error(
-                            request, f'Speaking card in lesson: {lesson_number}, screen: {screen_number} need to be added ')
+                            request, f'Speaking card in lesson: {lesson_number}, screen: {screen_number} need to add content ')
 
                 # Adding SUMMARY cards
                 if "summary" in table.rows[0].cells[0].text.lower():
@@ -330,18 +318,20 @@ def scraper(request):
                                         "cy": ""
                                     },
                                     "content": {
-                                        "en": table.rows[2].cells[0].text,
-                                        "cy": table.rows[2].cells[1].text,
+                                        "en": '',
+                                        "cy": '',
                                         "_editorEn": "visual"
                                     }
                                 },
                             },
                         )
                         card_number + 1
+                        add_static_card_content(
+                            dic, lesson_number, screen_number, card_number, table)
                         continue
                     except IndexError:
                         messages.error(
-                            request, f'summary card in lesson: {lesson_number}, screen: {screen_number} need to be added ')
+                            request, f'summary card in lesson: {lesson_number}, screen: {screen_number} need to add content ')
 
                 # Adding MCQ cards
                 if "MCQ" in table.rows[0].cells[0].text:
@@ -355,18 +345,20 @@ def scraper(request):
                                         "cy": ""
                                     },
                                     "content": {
-                                        "en": table.rows[2].cells[0].text,
-                                        "cy": table.rows[2].cells[1].text,
+                                        "en": '',
+                                        "cy": '',
                                         "_editorEn": "visual"
                                     }
                                 },
                             },
                         )
                         card_number + 1
+                        add_static_card_content(
+                            dic, lesson_number, screen_number, card_number, table)
                         continue
                     except IndexError:
                         messages.error(
-                            request, f'MCQ card in lesson: {lesson_number}, screen: {screen_number} need to be added ')
+                            request, f'MCQ card in lesson: {lesson_number}, screen: {screen_number} need to add conntent ')
 
               # Spot the mistake card
                 if "Spot the mistake" in table.rows[0].cells[0].text:
@@ -425,7 +417,7 @@ def scraper(request):
                         messages.error(
                             request, f'Spot the mistake card in lesson: {lesson_number}, screen: {screen_number} need to be added ')
 
-                # video card
+                # --------------------------------------------------------------------------------------------------------------------------------  check again video card
                 if 'Video block' in table.rows[0].cells[0].text:
                     # print(table.rows[2].cells[0].text.split('/')[0].strip())
                     try:
@@ -474,8 +466,8 @@ def scraper(request):
                                     "type": "sortableColumns",
                                     "data": {
                                         "title": {
-                                            "en": table.rows[2].cells[0].text,
-                                            "cy": table.rows[2].cells[1].text,
+                                            "en": '',
+                                            "cy": '',
                                         },
                                         "content": {
                                             "en": "",
@@ -541,6 +533,8 @@ def scraper(request):
 
                             )
                             card_number + 1
+                            add_static_card_content(
+                                dic, lesson_number, screen_number, card_number, table)
                             continue
                     except IndexError:
                         messages.error(
@@ -558,20 +552,22 @@ def scraper(request):
                                         "cy": ""
                                     },
                                     "content": {
-                                        "en": table.rows[2].cells[0].text,
-                                        "cy": table.rows[2].cells[1].text,
+                                        "en": '',
+                                        "cy": '',
                                     }
                                 }
                             }
 
                         )
                         card_number + 1
+                        add_static_card_content(
+                            dic, lesson_number, screen_number, card_number, table)
                         continue
                     except IndexError:
                         messages.error(
                             request, f'REFLECTION card in Lesson {lesson_number}, Screen {screen_number}, need to be added')
 
-              # Question carousel card
+              # --------------------------------------------------------------------------------------------------------------------need to be check Question carousel card
               #   need to loop for the tables
                 if 'Question Carousel'.lower() in table.rows[0].cells[0].text.lower():
                     try:
@@ -579,17 +575,48 @@ def scraper(request):
                             {
                                 "type": "carousel",
                                 "data": {
-                                        "scrollBar": False,
-                                        "indicator": True,
-                                        "loop": True,
-                                        "content": {
-                                            "en": table.rows[1].cells[0].text,
-                                            "cy": table.rows[1].cells[1].text,
-                                        }
-                                }
-                            },
+                                        "title": {
+                                            "en": "",
+                                            "cy": ""
+                                        },
+                                    "content": {
+                                            "en": "<p><span style=\"color:rgba(0,0,0,0.847);\">Write each question in your book, answer them and then share the answers with your teacher.&nbsp;</span></p>",
+                                            "cy": "",
+                                            "_editorEn": "visual"
+                                        },
+                                    "slides": [],
+                                    "indicator": True,
+                                    "loop": True
+                                },
+                                "answer": {
+                                    "en": "",
+                                    "cy": ""
+                                },
+                                "hint": {
+                                    "en": "",
+                                    "cy": ""
+                                },
+                                "extension": {
+                                    "en": "",
+                                    "cy": ""
+                                },
+                                "downloadFiles": []
+                            }
+
                         )
                         card_number + 1
+                        try:
+                            for i in range(3, len(table.rows)):
+                                dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['data']['slides'].append(
+                                    {
+                                        "en": f"<p><span style=\"color:rgba(0,0,0,0.847);\"><strong>{table.rows[i].cells[0].text}&nbsp;</strong></span></p>",
+                                        "cy": f"<p><span style=\"color:rgba(0,0,0,0.847);\"><strong>{table.rows[i].cells[1].text}&nbsp;</strong></span></p>",
+                                        "_editorEn": "visual"
+                                    },
+                                )
+                            continue
+                        except IndexError:
+                            continue
                         continue
                     except IndexError:
                         messages.error(
@@ -608,7 +635,8 @@ def scraper(request):
                                     },
                                     "content": {
                                         "en": table.rows[2].cells[0].text,
-                                        "cy": table.rows[2].cells[1].text, }
+                                        "cy": table.rows[2].cells[1].text,
+                                    }
                                 }
                             }
                         )
@@ -665,7 +693,7 @@ def scraper(request):
                         card_number + 1
                         try:
                             for i in range(3, len(table.rows)):
-                                if table.rows[3].cells[0].text == table.rows[i].cells[0].text :
+                                if table.rows[3].cells[0].text == table.rows[i].cells[0].text:
                                     dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['data']['choices'].append(
                                         {
                                             "answer": {
@@ -714,41 +742,7 @@ def scraper(request):
                                         "_editorEn": "code"
                                     },
                                     "options": {
-                                        "en": [
-                                            [
-                                                "suspicious",
-                                                "happy",
-                                                "fearful",
-                                                "excited",
-                                                "enthralled"
-                                            ],
-                                            [
-                                                "banquet",
-                                                "meeting",
-                                                "War Council ",
-                                                "conference"
-                                            ],
-                                            [
-                                                "Fleance",
-                                                "Malcolm",
-                                                "Donalbain",
-                                                "Ross",
-                                                "Lennox"
-                                            ],
-                                            [
-                                                "murderers",
-                                                "servants ",
-                                                "friends",
-                                                "bodyguards"
-                                            ],
-                                            [
-                                                "fear",
-                                                "joy",
-                                                "expectation",
-                                                "optimism",
-                                                "pessimism"
-                                            ]
-                                        ],
+                                        "en": [],
                                         "cy": []
                                     }
                                 },
@@ -777,9 +771,9 @@ def scraper(request):
                                                                                                             1]['data']['activityContent']['cy'] += f'<p>{table.rows[i].cells[2].text}</p>\n'
                                 # appending the answers
                                 dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
-                                                                                                            1]['data']['options']['en'].append([table.rows[i].cells[1].text])
+                                                                                                            1]['data']['options']['en'].append(table.rows[i].cells[1].text.split("\u00a0"))
                                 dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
-                                                                                                            1]['data']['options']['cy'].append([table.rows[i].cells[3].text])
+                                                                                                            1]['data']['options']['cy'].append(table.rows[i].cells[1].text.split("\u00a0"))
                             messages.error(
                                 request, f'Fill the gaps – dropdown card in lesson: {lesson_number}, screen: {screen_number} need to add dropdown')
                         except IndexError:
@@ -1075,7 +1069,7 @@ def scraper(request):
                             request, f'Download block card in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
                 # GLOSSARY
-                # ------------------------------------------------------------------------------------------------------ loop through the content
+                # ------------------------------------------------------------------------------------------------------ loop in welsh through the content
                 if 'GLOSSARY'.lower() in table.rows[0].cells[0].text.lower():
                     try:
                         if table.rows[2].cells[0].text.lower().strip() in dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['data']['content']['en'].lower():
@@ -1085,6 +1079,18 @@ def scraper(request):
                         messages.error(
                             request, f'GLOSSARY {lesson_number}, screen: {screen_number} need to be in the correct position')
                         continue
+
+                # EXTENSION
+                if 'EXTENSION'.lower() in table.rows[0].cells[0].text.lower():
+                    try:
+                        if 'extension'.lower() in dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['data']['content']['en'].lower():
+                            dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -1]['extension']['en'] += f'{table.rows[2].cells[0].text}'
+                            dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -1]['extension']['cy'] += f'{table.rows[2].cells[1].text}'
+                    except IndexError:
+                        messages.error(
+                            request, f'GLOSSARY {lesson_number}, screen: {screen_number} need to be in the correct position')
+                        continue
+
 
                 # TEST YOURSELF
                 if 'Static text – TEST YOURSELF (for past paper questions only)'.lower() in table.rows[0].cells[0].text.lower():
