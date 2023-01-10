@@ -792,7 +792,7 @@ def scraper(request):
 
                  # Fill the gaps typing card
                 # ------------------------------------------------------------------------------------------------------ loop through the content
-                if 'Fill the gaps – Typing'.lower() in table.rows[0].cells[0].text.lower():
+                if 'Fill the gaps - Typing'.lower() in table.rows[0].cells[0].text.lower():
                     try:
                         dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'].append(
                             {
