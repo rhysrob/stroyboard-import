@@ -1093,8 +1093,11 @@ def scraper(request):
                     except IndexError:
                         messages.error(
                             request, f'GLOSSARY {lesson_number}, screen: {screen_number} need to be in the correct position')
-                        continue
 
+                    except KeyError:
+                        messages.error(
+                            request, f'GLOSSARY {lesson_number}, screen: {screen_number} keyword error')
+                        continue
 
                 # TEST YOURSELF
                 if 'Static text – TEST YOURSELF (for past paper questions only)'.lower() in table.rows[0].cells[0].text.lower():
