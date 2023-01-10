@@ -1349,12 +1349,12 @@ def scraper(request):
                                         "cy": ""
                                     },
                                     "content": {
-                                        "en": f"\n<p>{table.rows[2].cells[0].text}</p>\n",
-                                        "cy": f"\n<p>{table.rows[2].cells[1].text}</p>\n"
+                                        "en": '',
+                                        "cy": ''
                                     },
                                     "question": {
-                                        "en": "\n<p>What to Think About!</p>\n",
-                                        "cy": "\n<p>What to Think About!CY</p>\n"
+                                        "en": '',
+                                        "cy": ''
                                     }
                                 },
                                 "answer": {
@@ -1373,6 +1373,15 @@ def scraper(request):
                             }
                         )
                         card_number + 1
+                        # looping and appending cells
+                        loop_though_table_content(3, dic,lesson_number,screen_number,card_number,table, 'question')
+                        # static appending
+                        try:
+                            dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
+                                                                                                        1]['data']['content']['en'] += table.rows[2].cells[0].text
+                            dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -1]['data']['content']['cy'] += table.rows[2].cells[1].text
+                        except IndexError:
+                            continue
                         continue
                     except IndexError:
                         messages.error(
