@@ -11,6 +11,7 @@ def scraper(request):
     dic = {}
     lesson_number = 0
     screen_number = 0
+    screen_total = 0
     card_number = 0
 
     if request.POST:
@@ -49,6 +50,8 @@ def scraper(request):
             # lessons
             dic['lessons'] = []
 
+           
+           # loop through tables
             for table in tables:
                 if 'Language'.lower() in table.rows[0].cells[0].text.lower():
                     if "Lesson".lower() in table.rows[1].cells[0].text.lower():
@@ -93,6 +96,7 @@ def scraper(request):
 
                                     )
                                     screen_number += 1
+                                    screen_total += 1
                                     card_number = 0
                                     if table.rows[2].cells[1].text == '':
                                         messages.error(
@@ -120,11 +124,16 @@ def scraper(request):
 
                             )
                             screen_number += 1
+                            screen_total += 1
                             card_number = 0
                             continue
                         except IndexError:
                             messages.error(
                                 request, f'Screen title in lesson: {lesson_number}, screen: {screen_number} need to be added')
+
+                if 'Hero image block'.lower() in table.rows[0].cells[0].text.lower():
+                    print(table.rows[2].cells[0].text)
+
                 # Lesson Objectives
                 if 'LESSON OBJECTIVES'.lower() in table.rows[0].cells[0].text.lower():
                     try:
@@ -160,9 +169,6 @@ def scraper(request):
                         card_number + 1
                         add_static_card_content(dic, lesson_number, screen_number, card_number, table)
                         loop_though_table_content(3, dic,lesson_number,screen_number,card_number,table)
-                        loop_though_table_content(4, dic,lesson_number,screen_number,card_number,table)
-                        loop_though_table_content(5, dic,lesson_number,screen_number,card_number,table)
-                        loop_though_table_content(6, dic,lesson_number,screen_number,card_number,table)
                         continue
                     except IndexError:
                         messages.error(
@@ -204,9 +210,6 @@ def scraper(request):
                         add_static_card_content(
                             dic, lesson_number, screen_number, card_number, table)
                         loop_though_table_content(3, dic,lesson_number,screen_number,card_number,table)
-                        loop_though_table_content(4, dic,lesson_number,screen_number,card_number,table)
-                        loop_though_table_content(5, dic,lesson_number,screen_number,card_number,table)
-                        loop_though_table_content(6, dic,lesson_number,screen_number,card_number,table)
                         continue
                     except IndexError:
                         messages.error(
@@ -1477,7 +1480,7 @@ def scraper(request):
                         messages.error(
                             request, f'Gallery Card in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
-            messages.success(request, 'File converted succesfully')
+            messages.success(request, f'File converted succesfully, it has {lesson_number} lessons and {screen_total} screens')
     dic = json.dumps(dic, indent=4)
     context = {'dic': dic}
     return render(request, 'scraper.html', context)
