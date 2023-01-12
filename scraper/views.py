@@ -131,8 +131,17 @@ def scraper(request):
                             messages.error(
                                 request, f'Screen title in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
+
+                    # Hero image block
                 if 'Hero image block'.lower() in table.rows[0].cells[0].text.lower():
-                    print(table.rows[2].cells[0].text)
+                        messages.error(
+                                request, f'Hero image  block in lesson: {lesson_number}, screen: {screen_number} need to be added')
+
+                    # Image block'
+                if 'Image block'.lower() in table.rows[0].cells[0].text.lower():
+                        messages.error(
+                                request, f'Imagen block in lesson: {lesson_number}, screen: {screen_number} need to be added')
+
 
                 # Lesson Objectives
                 if 'LESSON OBJECTIVES'.lower() in table.rows[0].cells[0].text.lower():
@@ -539,6 +548,7 @@ def scraper(request):
                             add_static_card_content(
                                 dic, lesson_number, screen_number, card_number, table)
                             continue
+                        messages.error(request, f'Sortable into Columns card need info in lesson: {lesson_number}, screen: {screen_number}')
                     except IndexError:
                         messages.error(
                             request, f'Sortable into Columns card in lesson: {lesson_number}, screen: {screen_number} need to be added')
@@ -1102,6 +1112,22 @@ def scraper(request):
                             request, f'GLOSSARY {lesson_number}, screen: {screen_number} keyword error')
                         continue
 
+                # HINT/SUPPORT
+                if 'HINT/SUPPORT'.lower() in table.rows[0].cells[0].text.lower():
+                    try:
+                        if 'hints'.lower() in dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['data']['content']['en'].lower():
+                            dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -1]['hints']['en'] += f'{table.rows[2].cells[0].text}'
+                            dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -1]['hints']['cy'] += f'{table.rows[2].cells[1].text}'
+                    except IndexError:
+                        messages.error(
+                            request, f'HINT/SUPPORT in lesson{lesson_number}, screen: {screen_number} need to be in the correct position')
+
+                    except KeyError:
+                        messages.error(
+                            request, f'HINT/SUPPORT in lesson {lesson_number}, screen: {screen_number} could not be added')
+                        continue
+
+
                 # TEST YOURSELF
                 if 'Static text – TEST YOURSELF (for past paper questions only)'.lower() in table.rows[0].cells[0].text.lower():
                     try:
@@ -1248,6 +1274,7 @@ def scraper(request):
                     except IndexError:
                         messages.error(
                             request, f'True or False in lesson: {lesson_number}, screen: {screen_number} need to be added')
+                            
 
                  # Structured Framework
                  # ------------------------------------------------------------------------------------------------------ check this activity
