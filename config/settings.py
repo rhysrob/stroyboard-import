@@ -15,18 +15,21 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+from environs import Env  # new
+env = Env()  # new
+env.read_env()  # new
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '!+vgn*3d)cd_fl_x1=pbbpskz^9d7!pe2d_$t4&b4&5^g_h-$*'
+SECRET_KEY = env.str("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['wjec-scraper.herokuapp.com', '127.0.0.1']
-
+DEBUG = env.bool("DEBUG", default=False)
+ALLOWED_HOSTS = env.list("ALLOWED_HOST")
+DEPLOYED = env.bool("DEPLOYED")
 
 # Application definition
 

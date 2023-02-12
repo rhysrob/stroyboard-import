@@ -50,7 +50,6 @@ def scraper(request):
             # lessons
             dic['lessons'] = []
 
-           
            # loop through tables
             for table in tables:
                 if 'Language'.lower() in table.rows[0].cells[0].text.lower():
@@ -131,18 +130,6 @@ def scraper(request):
                             messages.error(
                                 request, f'Screen title in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
-
-                    # Hero image block
-                if 'Hero image block'.lower() in table.rows[0].cells[0].text.lower():
-                        messages.error(
-                                request, f'Hero image  block in lesson: {lesson_number}, screen: {screen_number} need to be added')
-
-                    # Image block'
-                if 'Image block'.lower() in table.rows[0].cells[0].text.lower():
-                        messages.error(
-                                request, f'Imagen block in lesson: {lesson_number}, screen: {screen_number} need to be added')
-
-
                 # Lesson Objectives
                 if 'LESSON OBJECTIVES'.lower() in table.rows[0].cells[0].text.lower():
                     try:
@@ -176,8 +163,10 @@ def scraper(request):
                             },
                         )
                         card_number + 1
-                        add_static_card_content(dic, lesson_number, screen_number, card_number, table)
-                        loop_though_table_content(3, dic,lesson_number,screen_number,card_number,table)
+                        add_static_card_content(
+                            dic, lesson_number, screen_number, card_number, table)
+                        loop_though_table_content(
+                            3, dic, lesson_number, screen_number, card_number, table)
                         continue
                     except IndexError:
                         messages.error(
@@ -218,11 +207,60 @@ def scraper(request):
                         card_number + 1
                         add_static_card_content(
                             dic, lesson_number, screen_number, card_number, table)
-                        loop_though_table_content(3, dic,lesson_number,screen_number,card_number,table)
+                        loop_though_table_content(
+                            3, dic, lesson_number, screen_number, card_number, table)
                         continue
                     except IndexError:
                         messages.error(
                             request, f' Reading card in Lesson {lesson_number}, Screen {screen_number} need to add content')
+
+                # Hero image block
+                if 'Hero image block'.lower() in table.rows[0].cells[0].text.lower():
+                        messages.error(
+                                request, f'Hero image  block in lesson: {lesson_number}, screen: {screen_number} need to be added')
+
+                # Image block'
+                if 'Image block'.lower() in table.rows[0].cells[0].text.lower():
+                    try:
+                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'].append(
+                            {
+                                "type": "look",
+                                "data": {
+                                    "title": {
+                                        "en": "",
+                                        "cy": ""
+                                    },
+                                    "content": {
+                                        "en": "",
+                                        "cy": "",
+                                        "_editorEn": "code"
+                                    }
+                                },
+                                "answer": {
+                                    "en": "",
+                                    "cy": ""
+                                },
+                                "hint": {
+                                    "en": "",
+                                    "cy": ""
+                                },
+                                "extension": {
+                                    "en": "",
+                                    "cy": ""
+                                },
+                                "downloadFiles": []
+                            },
+                        )
+                        card_number + 1
+                        messages.success(request, f'Image block in {lesson_number} lessons and {screen_total} screens need image proccess')
+                        add_static_card_content(
+                            dic, lesson_number, screen_number, card_number, table)
+                        continue
+                    except IndexError:
+                        messages.error(
+                            request, f'Image block card in lesson: {lesson_number}, screen: {screen_number} need to be added ')
+
+
 
                 # adding WRITING cards
                 if "WRITING".lower() in table.rows[0].cells[0].text.lower():
@@ -437,6 +475,7 @@ def scraper(request):
                             {
                                 "type": "look",
                                 "data": {
+                                    
                                     "title": {
                                         "en": "",
                                         "cy": ""
@@ -463,10 +502,12 @@ def scraper(request):
                             },
                         )
                         card_number + 1
+                        messages.success(request, f'Need to add video id in {lesson_number} lessons and {screen_total} screens')
                         continue
                     except IndexError:
                         messages.error(
                             request, f'Video block card in lesson: {lesson_number}, screen: {screen_number} need to be addded ')
+
 
                 # Sortable into Columns
                 # ------------------------------------------------------------------------------------------------------ list later loop through the content
