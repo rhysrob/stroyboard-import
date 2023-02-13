@@ -1178,8 +1178,8 @@ def scraper(request):
                                 "type": "testYourself",
                                         "data": {
                                             "title": {
-                                                "en": "Test Yourself Title",
-                                                "cy": "_Test Yourself Title"
+                                                "en": "",
+                                                "cy": ""
                                             },
                                             "content": {
                                                 "en": table.rows[2].cells[0].text,
