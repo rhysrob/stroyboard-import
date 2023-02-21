@@ -1179,11 +1179,16 @@ def scraper(request):
 
                 # GLOSSARY
                 # ------------------------------------------------------------------------------------------------------ loop in welsh through the content
+
                 if 'GLOSSARY'.lower() in table.rows[0].cells[0].text.lower():
                     try:
-                        if table.rows[2].cells[0].text.lower().strip() in dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['data']['content']['en'].lower():
-                            dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
-                                                                                                        1]['data']['content']['en'] += f'<span data-glossary=\"{table.rows[2].cells[1].text}\">{table.rows[2].cells[0].text}</span>'
+                         for i in range(2, len(table.rows)):
+                            if table.rows[i].cells[0].text.lower().strip() in dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['data']['content']['en'].lower():
+                                dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -1]['data']['content']['en'] += f'<span data-glossary=\"{table.rows[i].cells[1].text}\">{table.rows[i].cells[0].text}</span>\n'   
+                            if table.rows[i].cells[2].text.lower().strip() in dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['data']['content']['cy'].lower():
+                                dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -1]['data']['content']['cy'] += f'<span data-glossary=\"{table.rows[i].cells[3].text}\">{table.rows[i].cells[2].text}</span>\n'
+                            messages.error(
+                            request, f'GLOSSARY card in lesson: {lesson_number}, screen: {screen_number} loaded correctly')
                     except IndexError:
                         messages.error(
                             request, f'GLOSSARY {lesson_number}, screen: {screen_number} need to be in the correct position')
