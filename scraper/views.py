@@ -1370,17 +1370,17 @@ def scraper(request):
                         messages.error(
                             request, f'True or False in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
-                 # Structured Framework
+                 # Ranking correct answer
                  # ------------------------------------------------------------------------------------------------------ check this activity
-                if 'Structured Framework'.lower() in table.rows[0].cells[0].text.lower():
+                if 'Ranking correct answer'.lower() in table.rows[0].cells[0].text.lower():
                     try:
                         dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'].append(
                             {
                                 "type": "sortable",
                                 "data": {
                                     "title": {
-                                        "en": "Structured Framework",
-                                        "cy": "CY Structured Framework"
+                                        "en": "",
+                                        "cy": ""
                                     },
                                     "content": {
                                         "en": "<p>Reorder the items in to the correct order.</p>",
@@ -1388,75 +1388,32 @@ def scraper(request):
                                     },
                                     "doCheck": True,
                                     "activityContent": [
-                                        {
-                                            "title": {
-                                                "en": "Introduction",
-                                                "cy": "Cyflwyniad"
-                                            },
-                                            "str": {
-                                                "en": "Many were sharecroppers and were forced to give up their farms.",
-                                                "cy": "Roedd llawer ohonyn nhw'n gyfran-gnydwyr (<em>sharecroppers</em>) ac fe gawson nhw eu gorfodi i roi'r gorau i'w ffermydd."
-                                            }
-                                        },
-                                        {
-                                            "title": {
-                                                "en": "Section 1",
-                                                "cy": "Rhan 1"
-                                            },
-                                            "str": {
-                                                "en": "Many picked cotton, which was not in as much demand.",
-                                                "cy": "Roedd llawer yn casglu cotwm, a doedd dim cymaint o alw amdano."
-                                            }
-                                        },
-                                        {
-                                            "title": {
-                                                "en": "Section 2",
-                                                "cy": "Rhan 2"
-                                            },
-                                            "str": {
-                                                "en": "They had the lowest paid jobs.",
-                                                "cy": " Nhw oedd â'r swyddi a oedd yn talu'r lleiaf."
-                                            }
-                                        },
-                                        {
-                                            "title": {
-                                                "en": "Section 3",
-                                                "cy": "Rhan 3"
-                                            },
-                                            "str": {
-                                                "en": "They were not educated.",
-                                                "cy": "Doedden nhw ddim wedi cael eu haddysgu."
-                                            }
-                                        },
-                                        {
-                                            "title": {
-                                                "en": "Section 4",
-                                                "cy": "Rhan 4"
-                                            },
-                                            "str": {
-                                                "en": "They were subject to prejudice and discrimination.",
-                                                "cy": "Roedden nhw'n profi rhagfarn a gwahaniaethu."
-                                            }
-                                        },
-                                        {
-                                            "title": {
-                                                "en": "Conclusion",
-                                                "cy": "Diweddglo"
-                                            },
-                                            "str": {
-                                                "en": "Many were farm labourers who lost their jobs.",
-                                                "cy": "Roedd llawer ohonyn nhw'n weithwyr fferm a gollodd eu swyddi."
-                                            }
-                                        }
+                                       
                                     ]
                                 }
                             }
                         )
                         card_number + 1
+                        try:
+                            if table.rows[2].cells[0].text:
+                                for i in range(2, len(table.rows)):
+                                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -1]['data']['activityContent'].append(
+                                        {
+                                            "str": {
+                                                "en": table.rows[i].cells[0].text,
+                                                "cy": table.rows[i].cells[1].text,
+                                        },
+                                        }
+                                        )
+                            messages.success(
+                            request, f'Ranking correct answer card in lesson: {lesson_number}, screen: {screen_number} loaded correctly')
+
+                        except IndexError:
+                            continue
                         continue
                     except IndexError:
                         messages.error(
-                            request, f'Structured Framework(sortable) card in lesson: {lesson_number}, screen: {screen_number} need to be added')
+                            request, f'Ranking correct card in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
                 # Thought shower
                 if 'Thought shower'.lower() in table.rows[0].cells[0].text.lower():
