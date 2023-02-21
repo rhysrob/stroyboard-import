@@ -800,8 +800,6 @@ def scraper(request):
 
                         )
                         card_number + 1
-                        add_static_card_content(
-                            dic, lesson_number, screen_number, card_number, table)
                         try:
                             for i in range(3, len(table.rows)):
                                 if table.rows[3].cells[0].text == table.rows[i].cells[0].text:
