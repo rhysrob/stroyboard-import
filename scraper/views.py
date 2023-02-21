@@ -1253,7 +1253,7 @@ def scraper(request):
                             request, f'Static text – TEST YOURSELF (for past paper questions only) card in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
                 # MARK YOURSELF
-                if 'Static text – MARK YOURSELF  (for past paper questions only)'.lower() in table.rows[0].cells[0].text.lower():
+                if 'MARK YOURSELF'.lower() in table.rows[0].cells[0].text.lower():
                     try:
                         dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'].append(
 
@@ -1261,8 +1261,8 @@ def scraper(request):
                                 "type": "markYourself",
                                 "data": {
                                     "title": {
-                                        "en": "Mark Yourself Title",
-                                        "cy": "_Mark Yourself Title"
+                                        "en": "",
+                                        "cy": ""
                                     },
                                     "content": {
                                         "en": table.rows[2].cells[0].text,
@@ -1280,7 +1280,7 @@ def scraper(request):
                         continue
                     except IndexError:
                         messages.error(
-                            request, f'Static text – MARK YOURSELF  (for past paper questions only) card in lesson: {lesson_number}, screen: {screen_number} need to be added')
+                            request, f'Mark Yourself Card": {lesson_number}, screen: {screen_number} need to be added')
 
                  # True or False
                 # ------------------------------------------------------------------------------------------------------ list loop through the content
