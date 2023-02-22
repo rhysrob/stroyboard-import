@@ -1179,6 +1179,25 @@ def scraper(request):
                         messages.error(
                             request, f'Download block card in lesson: {lesson_number}, screen: {screen_number} errors')
 
+
+                # HINT/SUPPORT
+                # ------------------------------------------------------------------------------------------------------ Json errror
+                if 'HINT/SUPPORT'.lower() in table.rows[0].cells[0].text.lower():
+                    try:
+                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['hint']['en'] += f'<p>{table.rows[2].cells[0].text}</p>'
+                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['hint']['cy'] += f'<p>{table.rows[2].cells[1].text}</p>'
+                        card_number + 1
+                        messages.success(
+                            request, f'HINT/SUPPORT in lesson: {lesson_number}, screen: {screen_number} loaded successfully')
+                        continue
+                    except IndexError:
+                        messages.error(
+                            request, f'HINT/SUPPORT card in lesson: {lesson_number}, screen: {screen_number} need to be added')
+                    except KeyError:
+                        messages.error(
+                            request, f'HINT/SUPPORT card in lesson: {lesson_number}, screen: {screen_number} errors')
+
+
                 # GLOSSARY
                 # ------------------------------------------------------------------------------------------------------ loop in welsh through the content
 
@@ -1213,23 +1232,6 @@ def scraper(request):
                     except KeyError:
                         messages.error(
                             request, f'GLOSSARY {lesson_number}, screen: {screen_number} keyword error')
-                        continue
-
-                # HINT/SUPPORT
-                if 'HINT/SUPPORT'.lower() in table.rows[0].cells[0].text.lower():
-                    try:
-                        if 'hints'.lower() in dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['data']['content']['en'].lower():
-                            dic['lessons'][lesson_number - 1]['subLessons'][screen_number -
-                                                                            1]['cards'][card_number - 1]['hints']['en'] += f'{table.rows[2].cells[0].text}'
-                            dic['lessons'][lesson_number - 1]['subLessons'][screen_number -
-                                                                            1]['cards'][card_number - 1]['hints']['cy'] += f'{table.rows[2].cells[1].text}'
-                    except IndexError:
-                        messages.error(
-                            request, f'HINT/SUPPORT in lesson{lesson_number}, screen: {screen_number} need to be in the correct position')
-
-                    except KeyError:
-                        messages.error(
-                            request, f'HINT/SUPPORT in lesson {lesson_number}, screen: {screen_number} could not be added')
                         continue
 
                 # TEST YOURSELF
