@@ -201,7 +201,9 @@ def scraper(request):
                                     "en": "",
                                     "cy": ""
                                 },
-                                "downloadFiles": []
+                                "downloadFiles": [
+
+                                ]
                             },
                         )
                         card_number + 1
@@ -343,10 +345,12 @@ def scraper(request):
                         try:
                             if table.rows[3].cells[0].text:
                                 for i in range(3, len(table.rows)):
-                                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -1]['data']['answer']['en'] += f'{table.rows[i].cells[0].text}'
-                                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -1]['data']['answer']['cy'] += f'{table.rows[i].cells[1].text}'
+                                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number -
+                                                                                    1]['cards'][card_number - 1]['data']['answer']['en'] += f'{table.rows[i].cells[0].text}'
+                                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number -
+                                                                                    1]['cards'][card_number - 1]['data']['answer']['cy'] += f'{table.rows[i].cells[1].text}'
                             messages.success(
-                            request, f'questionandAnswer Card in lesson: {lesson_number}, screen: {screen_number} added correctly')
+                                request, f'questionandAnswer Card in lesson: {lesson_number}, screen: {screen_number} added correctly')
                         except IndexError:
                             continue
                         continue
@@ -690,7 +694,7 @@ def scraper(request):
                                             "en": "<p><span style=\"color:rgba(0,0,0,0.847);\">Write each question in your book, answer them and then share the answers with your teacher.&nbsp;</span></p>",
                                             "cy": "",
                                             "_editorEn": "visual"
-                                            },
+                                    },
                                     "slides": [],
                                     "indicator": True,
                                     "loop": True
@@ -1152,43 +1156,43 @@ def scraper(request):
                 # ------------------------------------------------------------------------------------------------------ Json errror
                 if 'Download block'.lower() in table.rows[0].cells[0].text.lower():
                     try:
-                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'].append(
+                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['downloadFiles'].append(
                             {
-                                "type": "download",
-                                "data": {
-                                    "title": {
-                                        "en": "Download",
-                                        "cy": "cy_Download"
-                                    },
-                                    "content": {
-                                        "en": "Text content",
-                                        "cy": "_Text content"
-                                    },
-                                    "link": {
-                                        "en": table.rows[2].cells[0].text,
-                                        "cy": table.rows[2].cells[1].text
-                                    }
+                                "fileName": {
+                                    "en": table.rows[2].cells[0].text,
+                                    "cy": table.rows[2].cells[1].text
+                                },
+                                "url": {
+                                    "en": 'Put download link here',
+                                    "cy": 'Cy Put download link here',
                                 }
                             }
                         )
                         card_number + 1
+                        messages.success(
+                            request, f'Download block in lesson: {lesson_number}, screen: {screen_number} loaded successfully')
                         continue
                     except IndexError:
                         messages.error(
                             request, f'Download block card in lesson: {lesson_number}, screen: {screen_number} need to be added')
+                    except KeyError:
+                        messages.error(
+                            request, f'Download block card in lesson: {lesson_number}, screen: {screen_number} errors')
 
                 # GLOSSARY
                 # ------------------------------------------------------------------------------------------------------ loop in welsh through the content
 
                 if 'GLOSSARY'.lower() in table.rows[0].cells[0].text.lower():
                     try:
-                         for i in range(2, len(table.rows)):
+                        for i in range(2, len(table.rows)):
                             if table.rows[i].cells[0].text.lower().strip() in dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['data']['content']['en'].lower():
-                                dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -1]['data']['content']['en'] += f'<span data-glossary=\"{table.rows[i].cells[1].text}\">{table.rows[i].cells[0].text}</span>\n'   
+                                dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
+                                                                                                            1]['data']['content']['en'] += f'<span data-glossary=\"{table.rows[i].cells[1].text}\">{table.rows[i].cells[0].text}</span>\n'
                             if table.rows[i].cells[2].text.lower().strip() in dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['data']['content']['cy'].lower():
-                                dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -1]['data']['content']['cy'] += f'<span data-glossary=\"{table.rows[i].cells[3].text}\">{table.rows[i].cells[2].text}</span>\n'
+                                dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
+                                                                                                            1]['data']['content']['cy'] += f'<span data-glossary=\"{table.rows[i].cells[3].text}\">{table.rows[i].cells[2].text}</span>\n'
                             messages.error(
-                            request, f'GLOSSARY card in lesson: {lesson_number}, screen: {screen_number} loaded correctly')
+                                request, f'GLOSSARY card in lesson: {lesson_number}, screen: {screen_number} loaded correctly')
                     except IndexError:
                         messages.error(
                             request, f'GLOSSARY {lesson_number}, screen: {screen_number} need to be in the correct position')
@@ -1229,7 +1233,7 @@ def scraper(request):
                         continue
 
                 # TEST YOURSELF
-                if 'Static text – TEST YOURSELF (for past paper questions only)'.lower() in table.rows[0].cells[0].text.lower():
+                if 'TEST YOURSELF'.lower() in table.rows[0].cells[0].text.lower():
                     try:
                         dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'].append(
 
@@ -1244,11 +1248,10 @@ def scraper(request):
                                                 "en": table.rows[2].cells[0].text,
                                                 "cy": table.rows[2].cells[1].text
                                             },
-                                            "link": {
-                                                "en": "https://resource.download.wjec.co.uk/vtc/2020-21/bl20-21_2-1/Pages%20from%20s18-3110-01.pdf",
-                                                "cy": "https://resource.download.wjec.co.uk/vtc/2020-21/bl20-21_2-1/Pages%20from%20s18-3110-51.pdf"
-                                            }
-                                        }
+                                        },
+                                "downloadFiles": [
+
+                                ]
                             }
                         )
                         card_number + 1
@@ -1277,7 +1280,10 @@ def scraper(request):
                                         "en": "https://resource.download.wjec.co.uk/vtc/2020-21/bl20-21_2-1/Pages%20from%20s18-geography1-ms.pdf",
                                         "cy": "https://resource.download.wjec.co.uk/vtc/2020-21/bl20-21_2-1/Pages%20from%20s18-3110n10-1-gcse-geography-u1-ms.pdf"
                                     }
-                                }
+                                },
+                                "downloadFiles": [
+
+                                ]
                             }
 
                         )
@@ -1393,7 +1399,7 @@ def scraper(request):
                                     },
                                     "doCheck": True,
                                     "activityContent": [
-                                       
+
                                     ]
                                 }
                             }
@@ -1402,16 +1408,16 @@ def scraper(request):
                         try:
                             if table.rows[2].cells[0].text:
                                 for i in range(2, len(table.rows)):
-                                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -1]['data']['activityContent'].append(
+                                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['data']['activityContent'].append(
                                         {
                                             "str": {
                                                 "en": table.rows[i].cells[0].text,
                                                 "cy": table.rows[i].cells[1].text,
-                                        },
+                                            },
                                         }
-                                        )
+                                    )
                             messages.success(
-                            request, f'Ranking correct answer card in lesson: {lesson_number}, screen: {screen_number} loaded correctly')
+                                request, f'Ranking correct answer card in lesson: {lesson_number}, screen: {screen_number} loaded correctly')
 
                         except IndexError:
                             continue
