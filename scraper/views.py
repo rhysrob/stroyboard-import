@@ -1600,11 +1600,3 @@ def scraper(request):
     dic = json.dumps(dic, indent=4)
     context = {'dic': dic}
     return render(request, 'scraper.html', context)
-
-    # ANSWER
-    # if 'ANSWER'.lower() in table.rows[0].cells[0].text.lower():
-
-    #     messages.error(
-    #         request, f'ANSWER card with answer in Lesson {lesson_number}, Screen {screen_number}, add content {table.rows[0].cells[0].text}')
-
-    #  if the uopload is successful
