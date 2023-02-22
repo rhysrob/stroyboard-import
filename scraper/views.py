@@ -1200,7 +1200,6 @@ def scraper(request):
 
                 # GLOSSARY
                 # ------------------------------------------------------------------------------------------------------ loop in welsh through the content
-
                 if 'GLOSSARY'.lower() in table.rows[0].cells[0].text.lower():
                     try:
                         for i in range(2, len(table.rows)):
@@ -1278,10 +1277,6 @@ def scraper(request):
                                         "en": table.rows[2].cells[0].text,
                                         "cy": table.rows[2].cells[1].text
                                     },
-                                    "link": {
-                                        "en": "https://resource.download.wjec.co.uk/vtc/2020-21/bl20-21_2-1/Pages%20from%20s18-geography1-ms.pdf",
-                                        "cy": "https://resource.download.wjec.co.uk/vtc/2020-21/bl20-21_2-1/Pages%20from%20s18-3110n10-1-gcse-geography-u1-ms.pdf"
-                                    }
                                 },
                                 "downloadFiles": [
 
