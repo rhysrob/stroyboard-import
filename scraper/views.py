@@ -1209,7 +1209,7 @@ def scraper(request):
                             if table.rows[i].cells[2].text.lower().strip() in dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['data']['content']['cy'].lower():
                                 dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
                                                                                                             1]['data']['content']['cy'] += f'<span data-glossary=\"{table.rows[i].cells[3].text}\">{table.rows[i].cells[2].text}</span>\n'
-                            messages.error(
+                            messages.success(
                                 request, f'GLOSSARY card in lesson: {lesson_number}, screen: {screen_number} loaded correctly')
                     except IndexError:
                         messages.error(
@@ -1217,21 +1217,21 @@ def scraper(request):
                         continue
 
                 # EXTENSION
+                # ------------------------------------------------------------------------------------------------------ Json errror
                 if 'EXTENSION'.lower() in table.rows[0].cells[0].text.lower():
                     try:
-                        if 'extension'.lower() in dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['data']['content']['en'].lower():
-                            dic['lessons'][lesson_number - 1]['subLessons'][screen_number -
-                                                                            1]['cards'][card_number - 1]['extension']['en'] += f'{table.rows[2].cells[0].text}'
-                            dic['lessons'][lesson_number - 1]['subLessons'][screen_number -
-                                                                            1]['cards'][card_number - 1]['extension']['cy'] += f'{table.rows[2].cells[1].text}'
+                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['extension']['en'] += f'<p>{table.rows[2].cells[0].text}</p>'
+                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['extension']['cy'] += f'<p>{table.rows[2].cells[1].text}</p>'
+                        card_number + 1
+                        messages.success(
+                            request, f'EXTENSION in lesson: {lesson_number}, screen: {screen_number} loaded successfully')
+                        continue
                     except IndexError:
                         messages.error(
-                            request, f'GLOSSARY {lesson_number}, screen: {screen_number} need to be in the correct position')
-
+                            request, f'EXTENSION card in lesson: {lesson_number}, screen: {screen_number} need to be added')
                     except KeyError:
                         messages.error(
-                            request, f'GLOSSARY {lesson_number}, screen: {screen_number} keyword error')
-                        continue
+                            request, f'EXTENSION card in lesson: {lesson_number}, screen: {screen_number} errors')
 
                 # TEST YOURSELF
                 if 'TEST YOURSELF'.lower() in table.rows[0].cells[0].text.lower():
@@ -1582,13 +1582,6 @@ def scraper(request):
     dic = json.dumps(dic, indent=4)
     context = {'dic': dic}
     return render(request, 'scraper.html', context)
-
-    # HINT/SUPPORT
-    # if 'HINT/SUPPORT'.lower() in table.rows[0].cells[0].text.lower():
-
-    #     )
-    #     messages.error(
-    #         request, f'HINT/SUPPORT  card with answer in Lesson {lesson_number}, Screen {screen_number}, add content {table.rows[0].cells[0].text}')
 
     # EXTENSION
     # if 'EXTENSION'.lower() in table.rows[0].cells[0].text.lower():
