@@ -1233,6 +1233,24 @@ def scraper(request):
                         messages.error(
                             request, f'EXTENSION card in lesson: {lesson_number}, screen: {screen_number} errors')
 
+
+                # Static text – ANSWER
+                # ------------------------------------------------------------------------------------------------------ Json errror
+                if 'Static text – ANSWER'.lower() in table.rows[0].cells[0].text.lower():
+                    try:
+                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['answer']['en'] += f'<p>{table.rows[2].cells[0].text}</p>'
+                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['answer']['cy'] += f'<p>{table.rows[2].cells[1].text}</p>'
+                        card_number + 1
+                        messages.success(
+                            request, f'ANSWER in lesson: {lesson_number}, screen: {screen_number} loaded successfully')
+                        continue
+                    except IndexError:
+                        messages.error(
+                            request, f'ANSWER card in lesson: {lesson_number}, screen: {screen_number} need to be added')
+                    except KeyError:
+                        messages.error(
+                            request, f'ANSWER card in lesson: {lesson_number}, screen: {screen_number} errors')
+
                 # TEST YOURSELF
                 if 'TEST YOURSELF'.lower() in table.rows[0].cells[0].text.lower():
                     try:
@@ -1582,12 +1600,6 @@ def scraper(request):
     dic = json.dumps(dic, indent=4)
     context = {'dic': dic}
     return render(request, 'scraper.html', context)
-
-    # EXTENSION
-    # if 'EXTENSION'.lower() in table.rows[0].cells[0].text.lower():
-
-    #     messages.error(
-    #         request, f'EXTENSION card with answer in Lesson {lesson_number}, Screen {screen_number}, add content {table.rows[0].cells[0].text}')
 
     # ANSWER
     # if 'ANSWER'.lower() in table.rows[0].cells[0].text.lower():
