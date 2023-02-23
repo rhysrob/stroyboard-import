@@ -583,46 +583,9 @@ def scraper(request):
                                             "cy": ""
                                         },
                                         "dragItems": [
-                                            {
-                                                "id": "item-1637836143496.374",
-                                                "text": {
-                                                    "en": "Banana",
-                                                    "cy": "Banana CY"
-                                                },
-                                                "answer": "col-1637836109525.1797"
-                                            },
-                                            {
-                                                "id": "item-1637836146182.3167",
-                                                "text": {
-                                                    "en": "Beer",
-                                                    "cy": "Beer CY"
-                                                },
-                                                "answer": "col-1637836109379.3835"
-                                            },
-                                            {
-                                                "id": "item-1637836149848.6738",
-                                                "text": {
-                                                    "en": "Sunday Roast",
-                                                    "cy": "Sunday Roast CY"
-                                                },
-                                                "answer": "col-1637836109525.1797"
-                                            }
                                         ],
                                         "dropItems": [
-                                            {
-                                                "id": "col-1637836109525.1797",
-                                                "title": {
-                                                    "en": 'headings column here',
-                                                    "cy": "headings column here CY"
-                                                }
-                                            },
-                                            {
-                                                "id": "col-1637836109379.3835",
-                                                "title": {
-                                                    "en": 'headings column here',
-                                                    "cy": "headings column here CY"
-                                                }
-                                            }
+
                                         ]
                                     },
                                     "answer": {
@@ -644,6 +607,42 @@ def scraper(request):
                             card_number + 1
                             add_static_card_content(
                                 dic, lesson_number, screen_number, card_number, table)
+
+                            # for dropItems
+                            try:
+                                for table in table.rows[3].cells[0].tables:
+                                    for i in range(0, len(table.columns)):
+                                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['data']['dropItems'].append(
+                                            {
+                                                "id": f'col-{i}',
+                                                "title": {
+                                                    "en": table.columns[i].cells[0].text,
+                                                    "cy": ''
+                                                }
+                                            }
+                                        )
+                                        # for dragItems
+                                        for j in range(1, len(table.rows)):
+                                            dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['data']['dragItems'].append(
+                                                {
+                                                    "id": table.rows[j].cells[i].text,
+                                                    "text": {
+                                                        "en": table.rows[j].cells[i].text,
+                                                        "cy": ''
+                                                    },
+                                                    "answer": f"col-{i}"
+                                                },
+                                            )
+
+                                # for dragItems
+
+                                # for welsh
+                                # for table in table.rows[3].cells[1].tables:
+                                #     for j in range(0, len(table.columns)):
+                                #         dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['data']['dropItems'][j]['title']['cy'] += 'yes'
+                                # f'{table.columns[i].cells[0].text}
+                            except IndexError:
+                                continue
                             continue
                         messages.error(
                             request, f'Sortable into Columns card need info in lesson: {lesson_number}, screen: {screen_number}')
@@ -694,7 +693,7 @@ def scraper(request):
                                             "en": "<p><span style=\"color:rgba(0,0,0,0.847);\">Write each question in your book, answer them and then share the answers with your teacher.&nbsp;</span></p>",
                                             "cy": "",
                                             "_editorEn": "visual"
-                                    },
+                                            },
                                     "slides": [],
                                     "indicator": True,
                                     "loop": True
@@ -1179,13 +1178,14 @@ def scraper(request):
                         messages.error(
                             request, f'Download block card in lesson: {lesson_number}, screen: {screen_number} errors')
 
-
                 # HINT/SUPPORT
                 # ------------------------------------------------------------------------------------------------------ Json errror
                 if 'HINT/SUPPORT'.lower() in table.rows[0].cells[0].text.lower():
                     try:
-                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['hint']['en'] += f'<p>{table.rows[2].cells[0].text}</p>'
-                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['hint']['cy'] += f'<p>{table.rows[2].cells[1].text}</p>'
+                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number -
+                                                                        1]['cards'][card_number - 1]['hint']['en'] += f'<p>{table.rows[2].cells[0].text}</p>'
+                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number -
+                                                                        1]['cards'][card_number - 1]['hint']['cy'] += f'<p>{table.rows[2].cells[1].text}</p>'
                         card_number + 1
                         messages.success(
                             request, f'HINT/SUPPORT in lesson: {lesson_number}, screen: {screen_number} loaded successfully')
@@ -1196,7 +1196,6 @@ def scraper(request):
                     except KeyError:
                         messages.error(
                             request, f'HINT/SUPPORT card in lesson: {lesson_number}, screen: {screen_number} errors')
-
 
                 # GLOSSARY
                 # ------------------------------------------------------------------------------------------------------ loop in welsh through the content
@@ -1220,8 +1219,10 @@ def scraper(request):
                 # ------------------------------------------------------------------------------------------------------ Json errror
                 if 'EXTENSION'.lower() in table.rows[0].cells[0].text.lower():
                     try:
-                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['extension']['en'] += f'<p>{table.rows[2].cells[0].text}</p>'
-                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['extension']['cy'] += f'<p>{table.rows[2].cells[1].text}</p>'
+                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
+                                                                                                    1]['extension']['en'] += f'<p>{table.rows[2].cells[0].text}</p>'
+                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
+                                                                                                    1]['extension']['cy'] += f'<p>{table.rows[2].cells[1].text}</p>'
                         card_number + 1
                         messages.success(
                             request, f'EXTENSION in lesson: {lesson_number}, screen: {screen_number} loaded successfully')
@@ -1233,13 +1234,14 @@ def scraper(request):
                         messages.error(
                             request, f'EXTENSION card in lesson: {lesson_number}, screen: {screen_number} errors')
 
-
                 # Static text – ANSWER
                 # ------------------------------------------------------------------------------------------------------ Json errror
                 if 'Static text – ANSWER'.lower() in table.rows[0].cells[0].text.lower():
                     try:
-                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['answer']['en'] += f'<p>{table.rows[2].cells[0].text}</p>'
-                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['answer']['cy'] += f'<p>{table.rows[2].cells[1].text}</p>'
+                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number -
+                                                                        1]['cards'][card_number - 1]['answer']['en'] += f'<p>{table.rows[2].cells[0].text}</p>'
+                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number -
+                                                                        1]['cards'][card_number - 1]['answer']['cy'] += f'<p>{table.rows[2].cells[1].text}</p>'
                         card_number + 1
                         messages.success(
                             request, f'ANSWER in lesson: {lesson_number}, screen: {screen_number} loaded successfully')
@@ -1270,7 +1272,7 @@ def scraper(request):
                                         },
                                 "downloadFiles": [
 
-                                ]
+                                        ]
                             }
                         )
                         card_number + 1
