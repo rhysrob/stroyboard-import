@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from docx import Document
 import json
-from .utils import add_static_card_content, loop_though_table_content
+from .utils import (add_static_card_content, loop_though_table_content, loop_through_tables_in_cells,append_table_to_answer_hint_extension)
 
 
 # Create your views here.
@@ -167,6 +167,7 @@ def scraper(request):
                             dic, lesson_number, screen_number, card_number, table)
                         loop_though_table_content(
                             3, dic, lesson_number, screen_number, card_number, table)
+                        loop_through_tables_in_cells(2, dic,lesson_number,screen_number,card_number,table, "content")
                         continue
                     except IndexError:
                         messages.error(
@@ -209,14 +210,7 @@ def scraper(request):
                         card_number + 1
                         add_static_card_content(
                             dic, lesson_number, screen_number, card_number, table)
-                        try:
-                            for i in range(2, len(table.rows)):
-                                if table in table.rows:
-                                    print('tables-> yes', table)
-                            continue
-                        except IndexError:
-                            print('error found')
-                            continue
+                        loop_through_tables_in_cells(2, dic,lesson_number,screen_number,card_number,table, "content")
                         continue
                     except IndexError:
                         messages.error(
@@ -264,6 +258,8 @@ def scraper(request):
                             request, f'Image block in {lesson_number} lessons and {screen_total} screens need image proccess')
                         add_static_card_content(
                             dic, lesson_number, screen_number, card_number, table)
+                        loop_through_tables_in_cells(2, dic,lesson_number,screen_number,card_number,table, "content")
+
                         continue
                     except IndexError:
                         messages.error(
@@ -304,6 +300,7 @@ def scraper(request):
                         card_number + 1
                         add_static_card_content(
                             dic, lesson_number, screen_number, card_number, table)
+                        loop_through_tables_in_cells(2, dic,lesson_number,screen_number,card_number,table, "content")
                         continue
                     except IndexError:
                         messages.error(
@@ -380,6 +377,8 @@ def scraper(request):
                         card_number + 1
                         add_static_card_content(
                             dic, lesson_number, screen_number, card_number, table)
+                        loop_through_tables_in_cells(2, dic,lesson_number,screen_number,card_number,table, "content")
+
                         continue
                     except IndexError:
                         messages.error(
@@ -407,6 +406,7 @@ def scraper(request):
                         card_number + 1
                         add_static_card_content(
                             dic, lesson_number, screen_number, card_number, table)
+                        loop_through_tables_in_cells(2, dic,lesson_number,screen_number,card_number,table, "content")
                         continue
                     except IndexError:
                         messages.error(
@@ -434,6 +434,8 @@ def scraper(request):
                         card_number + 1
                         add_static_card_content(
                             dic, lesson_number, screen_number, card_number, table)
+                        loop_through_tables_in_cells(2, dic,lesson_number,screen_number,card_number,table, "content")
+
                         continue
                     except IndexError:
                         messages.error(
@@ -461,6 +463,8 @@ def scraper(request):
                         card_number + 1
                         add_static_card_content(
                             dic, lesson_number, screen_number, card_number, table)
+                        loop_through_tables_in_cells(2, dic,lesson_number,screen_number,card_number,table, "content")
+
                         continue
                     except IndexError:
                         messages.error(
@@ -672,6 +676,8 @@ def scraper(request):
                         card_number + 1
                         add_static_card_content(
                             dic, lesson_number, screen_number, card_number, table)
+                        loop_through_tables_in_cells(2, dic,lesson_number,screen_number,card_number,table, "content")
+
                         continue
                     except IndexError:
                         messages.error(
@@ -753,6 +759,7 @@ def scraper(request):
                         card_number + 1
                         add_static_card_content(
                             dic, lesson_number, screen_number, card_number, table)
+                        loop_through_tables_in_cells(2, dic,lesson_number,screen_number,card_number,table, "content")
                         continue
                     except IndexError:
                         messages.error(
@@ -1186,6 +1193,7 @@ def scraper(request):
                                                                         1]['cards'][card_number - 1]['hint']['en'] += f'<p>{table.rows[2].cells[0].text}</p>'
                         dic['lessons'][lesson_number - 1]['subLessons'][screen_number -
                                                                         1]['cards'][card_number - 1]['hint']['cy'] += f'<p>{table.rows[2].cells[1].text}</p>'
+                        append_table_to_answer_hint_extension(2, dic,lesson_number,screen_number,card_number, table, "hint")                            
                         card_number + 1
                         messages.success(
                             request, f'HINT/SUPPORT in lesson: {lesson_number}, screen: {screen_number} loaded successfully')
@@ -1223,7 +1231,10 @@ def scraper(request):
                                                                                                     1]['extension']['en'] += f'<p>{table.rows[2].cells[0].text}</p>'
                         dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
                                                                                                     1]['extension']['cy'] += f'<p>{table.rows[2].cells[1].text}</p>'
+                                                                                                    
                         card_number + 1
+                        append_table_to_answer_hint_extension(2, dic,lesson_number,screen_number,card_number, table, "extension")                            
+
                         messages.success(
                             request, f'EXTENSION in lesson: {lesson_number}, screen: {screen_number} loaded successfully')
                         continue
@@ -1243,6 +1254,7 @@ def scraper(request):
                         dic['lessons'][lesson_number - 1]['subLessons'][screen_number -
                                                                         1]['cards'][card_number - 1]['answer']['cy'] += f'<p>{table.rows[2].cells[1].text}</p>'
                         card_number + 1
+                        append_table_to_answer_hint_extension(2, dic,lesson_number,screen_number,card_number, table, "answer")                            
                         messages.success(
                             request, f'ANSWER in lesson: {lesson_number}, screen: {screen_number} loaded successfully')
                         continue
@@ -1482,6 +1494,7 @@ def scraper(request):
                         # looping and appending cells
                         loop_though_table_content(
                             3, dic, lesson_number, screen_number, card_number, table, 'question')
+                        loop_through_tables_in_cells(2, dic,lesson_number,screen_number,card_number,table, "content")                               
                         # static appending
                         try:
                             dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number -
