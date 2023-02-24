@@ -1453,6 +1453,52 @@ def scraper(request):
                         messages.error(
                             request, f'Ranking correct card in lesson: {lesson_number}, screen: {screen_number} need to be added')
 
+
+                 # Ranking no correct answer
+                 # ------------------------------------------------------------------------------------------------------ check this activity
+                if 'Ranking no'.lower() in table.rows[0].cells[0].text.lower():
+                    try:
+                        dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'].append(
+                            {
+                                "type": "sortable",
+                                "data": {
+                                    "title": {
+                                        "en": "",
+                                        "cy": ""
+                                    },
+                                    "content": {
+                                        "en": "<p>Amend the items in which you believe is correct.</p>",
+                                        "cy": "<p>CY Amend the items in which you believe is correct.</p>"
+                                    },
+                                    "doCheck": False,
+                                    "activityContent": [
+
+                                    ]
+                                }
+                            }
+                        )
+                        card_number + 1
+                        try:
+                            if table.rows[2].cells[0].text:
+                                for i in range(2, len(table.rows)):
+                                    dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'][card_number - 1]['data']['activityContent'].append(
+                                        {
+                                            "str": {
+                                                "en": table.rows[i].cells[0].text,
+                                                "cy": table.rows[i].cells[1].text,
+                                            },
+                                        }
+                                    )
+                            messages.success(
+                                request, f'Ranking no correct answer card in lesson: {lesson_number}, screen: {screen_number} loaded correctly')
+
+                        except IndexError:
+                            continue
+                        continue
+                    except IndexError:
+                        messages.error(
+                            request, f'Ranking no correct card in lesson: {lesson_number}, screen: {screen_number} need to be added')
+
                 # Thought shower
                 if 'Thought shower'.lower() in table.rows[0].cells[0].text.lower():
                     try:
