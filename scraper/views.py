@@ -1330,77 +1330,76 @@ def scraper(request):
                                 "data": {
                                     "title": {
                                         "en": table.rows[1].cells[0].text,
-                                        "cy": table.rows[1].cells[1].text}
-                                },
-                                "content": {
-                                    "en": table.rows[3].cells[0].text,
-                                    "cy": table.rows[3].cells[1].text
-
-                                },
-                                "activityContent": [
-                                    [
-                                        {
-                                            "str": {
-                                                "en": "A1",
-                                                "cy": "A1_CY"
+                                        "cy": table.rows[1].cells[1].text
+                                    },
+                                    "content": {
+                                        "en": table.rows[3].cells[0].text,
+                                        "cy": table.rows[3].cells[1].text
+                                    },
+                                    "activityContent": [
+                                        [
+                                            {
+                                                "str": {
+                                                    "en": "A1",
+                                                    "cy": "A1_CY"
+                                                },
+                                                "correct": True
                                             },
-                                            "correct": True
-                                        },
-                                        {
-                                            "str": {
-                                                "en": "A2",
-                                                "cy": "A2_CY"
+                                            {
+                                                "str": {
+                                                    "en": "A2",
+                                                    "cy": "A2_CY"
+                                                }
                                             }
-                                        }
-                                    ],
-                                    [
-                                        {
-                                            "str": {
-                                                "en": "B1",
-                                                "cy": "B1_Cy"
+                                        ],
+                                        [
+                                            {
+                                                "str": {
+                                                    "en": "B1",
+                                                    "cy": "B1_Cy"
+                                                },
+                                                "correct": True
                                             },
-                                            "correct": True
-                                        },
-                                        {
-                                            "str": {
-                                                "en": "B2",
-                                                "cy": "B2_CY"
+                                            {
+                                                "str": {
+                                                    "en": "B2",
+                                                    "cy": "B2_CY"
+                                                }
                                             }
-                                        }
-                                    ],
-                                    [
-                                        {
-                                            "str": {
-                                                "en": "C1",
-                                                "cy": "C1_CY"
+                                        ],
+                                        [
+                                            {
+                                                "str": {
+                                                    "en": "C1",
+                                                    "cy": "C1_CY"
+                                                },
+                                                "correct": True
                                             },
-                                            "correct": True
-                                        },
-                                        {
-                                            "str": {
-                                                "en": "C2",
-                                                "cy": "C2_CY"
+                                            {
+                                                "str": {
+                                                    "en": "C2",
+                                                    "cy": "C2_CY"
+                                                }
                                             }
-                                        }
-                                    ],
-                                    [
-                                        {
-                                            "str": {
-                                                "en": "D1",
-                                                "cy": "D1_Cy"
+                                        ],
+                                        [
+                                            {
+                                                "str": {
+                                                    "en": "D1",
+                                                    "cy": "D1_Cy"
+                                                },
+                                                "correct": True
                                             },
-                                            "correct": True
-                                        },
-                                        {
-                                            "str": {
-                                                "en": "D2",
-                                                "cy": "D2_CY"
+                                            {
+                                                "str": {
+                                                    "en": "D2",
+                                                    "cy": "D2_CY"
+                                                }
                                             }
-                                        }
+                                        ]
                                     ]
-                                ]
+                                }
                             }
-
                         )
                         card_number + 1
                         continue
