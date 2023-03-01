@@ -4,7 +4,6 @@ from docx import Document
 import json
 from .utils import (add_static_card_content, loop_though_table_content, loop_through_tables_in_cells,append_table_to_answer_hint_extension)
 
-
 # Create your views here.
 def scraper(request):
     files = request.FILES.getlist('filename')
@@ -444,6 +443,7 @@ def scraper(request):
                 # Adding MCQ cards
                 if "MCQ".lower() in table.rows[0].cells[0].text.lower():
                     try:
+                        print(table.rows[0].cells[0].text)
                         dic['lessons'][lesson_number - 1]['subLessons'][screen_number - 1]['cards'].append(
                             {
                                 "type": "mcq",
@@ -456,7 +456,17 @@ def scraper(request):
                                         "en": '',
                                         "cy": '',
                                         "_editorEn": "visual"
-                                    }
+                                    },
+                                    "question":{
+                                        "en":table.rows[i].cells[0].text,
+                                        "cy":table.rows[i].cells[1].text
+                                    },
+                                    "choices":[
+                                        {
+                                            "answer":{"en":"","cy":""},
+                                            "correct":"true"
+                                        }
+                                    ]
                                 },
                             },
                         )
